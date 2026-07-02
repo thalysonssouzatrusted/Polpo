@@ -5,7 +5,7 @@ export function SiteFooter() {
     <footer style={{ padding: "40px 0", borderTop: "1px solid var(--border)", marginTop: "80px", backgroundColor: "#fff" }}>
       <div className="container" style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "20px" }}>
         <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-          <img src="/polpo-logo-dark.svg" alt="Polpo" style={{ height: "20px", opacity: 0.8 }} />
+          <img src="/Polpo/polpo-logo-dark.svg" alt="Polpo" style={{ height: "20px", opacity: 0.8 }} />
         </div>
         <div style={{ display: "flex", gap: "32px", flexWrap: "wrap", justifyContent: "center" }}>
           <Link href="/" style={{ color: "var(--text-muted)", fontSize: "14px", textDecoration: "none", transition: "color 0.2s" }} onMouseOver={(e) => e.currentTarget.style.color = 'var(--text)'} onMouseOut={(e) => e.currentTarget.style.color = 'var(--text-muted)'}>Visão Geral</Link>

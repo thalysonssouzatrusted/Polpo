@@ -228,7 +228,7 @@ export default function Home() {
         <section className="section" style={{ paddingTop: "120px", paddingBottom: "40px", textAlign: "center", display: "flex", flexDirection: "column", alignItems: "center" }}>
           <div className="container" style={{ maxWidth: "800px" }}>
             <div className="hero-hook reveal reveal-up" style={{ paddingBottom: "10px", position: "relative" }}>
-              <img src="/avatar-polpo-svg.svg" alt="Polpo" className="floating-avatar" />
+              <img src="/Polpo/avatar-polpo-svg.svg" alt="Polpo" className="floating-avatar" />
               <span className="eyebrow" style={{ margin: "0 auto 16px auto" }}><span>🐙</span> Polpo · lista de espera · junho 2026</span>
               <h1 className="hero-main-title">
                 Todo dono de restaurante <em>já sonhou</em> em ter mais braços. Trouxemos <em className="logo-font-highlight">oito.</em>
@@ -257,7 +257,7 @@ export default function Home() {
                   </div>
                   <div className="phone-wa-header">
                     <div className="phone-wa-avatar" style={{ background: 'transparent', padding: 0 }}>
-                      <img src="/avatar-polpo-svg.svg" alt="Polpo" style={{ width: "36px", height: "36px", borderRadius: "50%", objectFit: "cover" }} />
+                      <img src="/Polpo/avatar-polpo-svg.svg" alt="Polpo" style={{ width: "36px", height: "36px", borderRadius: "50%", objectFit: "cover" }} />
                     </div>
                     <div>
                       <div className="phone-wa-name">Polpo Concierge</div>

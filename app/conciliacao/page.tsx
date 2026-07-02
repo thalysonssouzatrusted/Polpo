@@ -43,7 +43,7 @@ export default function ConciliacaoLandingPage() {
         <section className="section" style={{ paddingTop: "120px", paddingBottom: "40px", textAlign: "center", display: "flex", flexDirection: "column", alignItems: "center" }}>
           <div className="container" style={{ maxWidth: "800px" }}>
             <div className="hero-hook reveal reveal-up" style={{ paddingBottom: "10px", position: "relative" }}>
-              <img src="/Ana.png" alt="Ana" className="floating-avatar" />
+              <img src="/Polpo/Ana.png" alt="Ana" className="floating-avatar" />
               <span className="eyebrow" style={{ margin: "0 auto 16px auto" }}>Para quem recebe de todo lado e não fecha o mês</span>
               <h1 className="hero-main-title">
                 O que você vendeu e o que <em className="logo-font-highlight">caiu na conta</em> são dois números diferentes.
@@ -75,7 +75,7 @@ export default function ConciliacaoLandingPage() {
                   </div>
                   <div className="phone-wa-header">
                     <div className="phone-wa-avatar" style={{ background: 'transparent', padding: 0 }}>
-                      <img src="/Ana.png" alt="Ana" style={{ width: "36px", height: "36px", borderRadius: "50%", objectFit: "cover" }} />
+                      <img src="/Polpo/Ana.png" alt="Ana" style={{ width: "36px", height: "36px", borderRadius: "50%", objectFit: "cover" }} />
                     </div>
                     <div>
                       <div className="phone-wa-name">Ana · Financeiro Polpo</div>
@@ -152,7 +152,7 @@ export default function ConciliacaoLandingPage() {
                 </p>
               </div>
               <div>
-                <img src="/illustration-polpo.png" alt="Ilustração Polpo" style={{ maxWidth: "100%", height: "auto" }} />
+                <img src="/Polpo/illustration-polpo.png" alt="Ilustração Polpo" style={{ maxWidth: "100%", height: "auto" }} />
               </div>
             </div>
             
@@ -241,7 +241,7 @@ export default function ConciliacaoLandingPage() {
               </div>
               
               <div className="reveal reveal-up delay-200" style={{ position: "relative", minHeight: "450px", borderRadius: "24px", overflow: "hidden", backgroundColor: "#f9f9f9" }}>
-                <img src="/mercado-conciliacao.png" alt="Mercado Conciliação" style={{ width: "100%", height: "100%", objectFit: "cover", position: "absolute", top: 0, left: 0 }} />
+                <img src="/Polpo/mercado-conciliacao.png" alt="Mercado Conciliação" style={{ width: "100%", height: "100%", objectFit: "cover", position: "absolute", top: 0, left: 0 }} />
               </div>
             </div>
           </div>

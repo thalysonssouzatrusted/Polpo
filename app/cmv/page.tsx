@@ -43,7 +43,7 @@ export default function CmvLandingPage() {
         <section className="section" style={{ paddingTop: "120px", paddingBottom: "40px", textAlign: "center", display: "flex", flexDirection: "column", alignItems: "center" }}>
           <div className="container" style={{ maxWidth: "800px" }}>
             <div className="hero-hook reveal reveal-up" style={{ paddingBottom: "10px", position: "relative" }}>
-              <img src="/Rodrigo.png" alt="Rodrigo" className="floating-avatar" />
+              <img src="/Polpo/Rodrigo.png" alt="Rodrigo" className="floating-avatar" />
               <span className="eyebrow" style={{ margin: "0 auto 16px auto" }}>Para quem vende bem e não entende por que o caixa não fecha</span>
               <h1 className="hero-main-title">
                 Você sabe o quanto <em className="logo-font-highlight">custa cada prato</em> que sai da sua cozinha?
@@ -75,7 +75,7 @@ export default function CmvLandingPage() {
                   </div>
                   <div className="phone-wa-header">
                     <div className="phone-wa-avatar" style={{ background: 'transparent', padding: 0 }}>
-                      <img src="/Rodrigo.png" alt="Rodrigo" style={{ width: "36px", height: "36px", borderRadius: "50%", objectFit: "cover" }} />
+                      <img src="/Polpo/Rodrigo.png" alt="Rodrigo" style={{ width: "36px", height: "36px", borderRadius: "50%", objectFit: "cover" }} />
                     </div>
                     <div>
                       <div className="phone-wa-name">Rodrigo · Estoque Polpo</div>
@@ -150,7 +150,7 @@ export default function CmvLandingPage() {
                 </p>
               </div>
               <div>
-                <img src="/illustration-polpo.png" alt="Ilustração Polpo" style={{ maxWidth: "100%", height: "auto" }} />
+                <img src="/Polpo/illustration-polpo.png" alt="Ilustração Polpo" style={{ maxWidth: "100%", height: "auto" }} />
               </div>
             </div>
             
@@ -237,7 +237,7 @@ export default function CmvLandingPage() {
               </div>
               
               <div className="reveal reveal-up delay-200" style={{ position: "relative", minHeight: "450px", borderRadius: "24px", overflow: "hidden", backgroundColor: "#f9f9f9" }}>
-                <img src="/mercado-cmv.png" alt="Mercado CMV" style={{ width: "100%", height: "100%", objectFit: "cover", position: "absolute", top: 0, left: 0 }} />
+                <img src="/Polpo/mercado-cmv.png" alt="Mercado CMV" style={{ width: "100%", height: "100%", objectFit: "cover", position: "absolute", top: 0, left: 0 }} />
               </div>
             </div>
           </div>

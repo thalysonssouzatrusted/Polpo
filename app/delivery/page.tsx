@@ -43,7 +43,7 @@ export default function DeliveryLandingPage() {
         <section className="section" style={{ paddingTop: "120px", paddingBottom: "40px", textAlign: "center", display: "flex", flexDirection: "column", alignItems: "center" }}>
           <div className="container" style={{ maxWidth: "800px" }}>
             <div className="hero-hook reveal reveal-up" style={{ paddingBottom: "10px", position: "relative" }}>
-              <img src="/Leo.png" alt="Léo" className="floating-avatar" />
+              <img src="/Polpo/Leo.png" alt="Léo" className="floating-avatar" />
               <span className="eyebrow" style={{ margin: "0 auto 16px auto" }}>Pare de assumir o prejuízo das plataformas</span>
               <h1 className="hero-main-title">
                 Você paga a conta dos <em className="logo-font-highlight">extravios e cancelamentos</em> do seu delivery?
@@ -75,7 +75,7 @@ export default function DeliveryLandingPage() {
                   </div>
                   <div className="phone-wa-header">
                     <div className="phone-wa-avatar" style={{ background: 'transparent', padding: 0 }}>
-                      <img src="/Leo.png" alt="Leo" style={{ width: "36px", height: "36px", borderRadius: "50%", objectFit: "cover" }} />
+                      <img src="/Polpo/Leo.png" alt="Leo" style={{ width: "36px", height: "36px", borderRadius: "50%", objectFit: "cover" }} />
                     </div>
                     <div>
                       <div className="phone-wa-name">Léo · Operações Polpo</div>
@@ -148,7 +148,7 @@ export default function DeliveryLandingPage() {
                 </p>
               </div>
               <div>
-                <img src="/illustration-polpo.png" alt="Ilustração Polpo" style={{ maxWidth: "100%", height: "auto" }} />
+                <img src="/Polpo/illustration-polpo.png" alt="Ilustração Polpo" style={{ maxWidth: "100%", height: "auto" }} />
               </div>
             </div>
             
@@ -236,7 +236,7 @@ export default function DeliveryLandingPage() {
               </div>
               
               <div className="reveal reveal-up delay-200" style={{ position: "relative", minHeight: "450px", borderRadius: "24px", overflow: "hidden", backgroundColor: "#f9f9f9" }}>
-                <img src="/mercado-delivery.png" alt="Mercado Delivery" style={{ width: "100%", height: "100%", objectFit: "cover", position: "absolute", top: 0, left: 0 }} />
+                <img src="/Polpo/mercado-delivery.png" alt="Mercado Delivery" style={{ width: "100%", height: "100%", objectFit: "cover", position: "absolute", top: 0, left: 0 }} />
               </div>
             </div>
           </div>

@@ -27,7 +27,7 @@ export function SiteHeader() {
         >
           <picture style={{ display: "flex", alignItems: "center" }}>
             <source media="(max-width: 768px)" srcSet="/avatar-polpo-svg.svg" />
-            <img src="/polpo-logo-dark.svg" alt="Polpo" style={{ height: "24px" }} />
+            <img src="/Polpo/polpo-logo-dark.svg" alt="Polpo" style={{ height: "24px" }} />
           </picture>
         </div>
 
