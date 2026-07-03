@@ -34,6 +34,10 @@ export const metadata: Metadata = {
     "Lista de espera da Polpo. Cancelamentos do iFood, performance de delivery e CMV — no seu WhatsApp.",
 };
 
+export const viewport = {
+  colorScheme: "light",
+  themeColor: "#ffffff",
+};
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="pt-BR" className={`${plusJakartaSans.variable} ${newsreader.variable} ${gebuk.variable}`}>
