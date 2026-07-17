@@ -49,7 +49,7 @@ export function SiteHeader() {
 
         <div style={{ display: "flex", justifyContent: "flex-end" }}>
           <button onClick={scrollToWaitlist} className="btn btn-accent">
-            Garantir minha vaga
+            Garantir<span className="hide-on-mobile"> minha vaga</span>
           </button>
         </div>
       </div>

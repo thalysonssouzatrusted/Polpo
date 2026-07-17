@@ -306,6 +306,10 @@ h1 em, h2 em, h3 em {
 }
 
 @media (max-width: 768px) {
+  .hide-on-mobile {
+    display: none;
+  }
+  
   .hero-card {
     border-radius: 24px;
     padding: 60px 0 0 0;
