@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#ffffff">
+<meta name="description" content="O Rodrigo recalcula o custo real dos seus pratos toda semana e mostra onde a margem está vazando.">
+<title>Polpo — Agente de CMV | O custo real de cada prato</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#17171f; --ink-soft:#4b4b58; --ink-faint:#8a8a96;
+  --paper:#ffffff; --paper-alt:#f7f6f2; --line:#e8e7e1;
+  --coral:#e8503a; --coral-soft:#fdeae6;
+  --wa-bg:#e9e3da; --wa-owner:#d9f7c6; --wa-agent:#ffffff;
+  --ok:#1e9e5a; --warn:#c77700; --bad:#cf3030;
+  --radius:16px; --max:1120px;
+  --font-sans:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  --font-serif:'Instrument Serif',Georgia,serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto} .reveal{transition:none!important;opacity:1!important;transform:none!important}}
+body{font-family:var(--font-sans);color:var(--ink);background:var(--paper);line-height:1.6;-webkit-font-smoothing:antialiased}
+img{max-width:100%;display:block}
+a{color:inherit;text-decoration:none}
+em{font-family:var(--font-serif);font-style:italic;font-weight:400;color:var(--coral)}
+h1 em,h2 em{font-size:1.06em;letter-spacing:.005em}
+.wrap{max-width:var(--max);margin:0 auto;padding:0 24px}
+
+/* header */
+header{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.nav{display:flex;align-items:center;justify-content:space-between;height:64px}
+.nav img{height:26px;width:auto}
+.nav-right{display:flex;align-items:center;gap:16px}
+.nav-tag{font-size:12.5px;color:var(--ink-faint);letter-spacing:.02em}
+.btn{display:inline-block;background:var(--ink);color:#fff;border:none;border-radius:999px;padding:12px 22px;font-size:14.5px;font-weight:600;cursor:pointer;transition:background .18s ease,transform .18s ease;font-family:var(--font-sans)}
+.btn:hover{background:var(--coral)}
+.btn:focus-visible,a:focus-visible,input:focus-visible,label:focus-visible{outline:2px solid var(--coral);outline-offset:2px}
+.btn-ghost{background:transparent;color:var(--ink);border:1.5px solid var(--line)}
+.btn-ghost:hover{background:var(--paper-alt);color:var(--ink)}
+.btn-sm{padding:9px 18px;font-size:13.5px}
+
+/* hero */
+.hero{padding:72px 0 80px;overflow:hidden}
+.hero-grid{display:grid;grid-template-columns:1.08fr .92fr;gap:56px;align-items:center}
+.eyebrow-badge{display:inline-flex;align-items:center;gap:10px;background:var(--paper-alt);border:1px solid var(--line);border-radius:999px;padding:7px 16px 7px 8px;font-size:13px;font-weight:600;color:var(--ink-soft);margin-bottom:26px}
+.eyebrow-badge img{width:26px;height:26px;border-radius:50%;object-fit:cover}
+h1{font-size:clamp(34px,4.6vw,54px);line-height:1.08;letter-spacing:-.022em;font-weight:800;margin-bottom:22px}
+.hero p.sub{font-size:18px;color:var(--ink-soft);max-width:34em;margin-bottom:32px}
+.hero-ctas{display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+.hero-ctas .link-how{font-size:14.5px;font-weight:600;color:var(--ink-soft);border-bottom:1.5px solid var(--line);padding-bottom:2px}
+.hero-ctas .link-how:hover{color:var(--coral);border-color:var(--coral)}
+
+/* phone chat */
+.phone{background:var(--wa-bg);border:1px solid var(--line);border-radius:28px;box-shadow:0 24px 60px -24px rgba(23,23,31,.28);overflow:hidden;max-width:400px;margin-left:auto}
+.phone-status{display:flex;justify-content:space-between;padding:10px 18px 6px;font-size:12px;font-weight:600;color:var(--ink-soft)}
+.chat-head{display:flex;align-items:center;gap:11px;background:#fff;padding:11px 16px;border-bottom:1px solid var(--line)}
+.chat-head img{width:38px;height:38px;border-radius:50%;object-fit:cover}
+.chat-head .nm{font-size:14.5px;font-weight:700;line-height:1.2}
+.chat-head .st{font-size:12px;color:var(--ok);display:flex;align-items:center;gap:5px}
+.chat-head .st::before{content:'';width:7px;height:7px;border-radius:50%;background:var(--ok)}
+.chat-body{padding:16px 14px 18px;display:flex;flex-direction:column;gap:9px;min-height:330px}
+.bub{max-width:86%;border-radius:12px;padding:10px 13px;font-size:13.6px;line-height:1.5;position:relative;box-shadow:0 1px 1px rgba(0,0,0,.06)}
+.bub .t{display:block;font-size:10.5px;color:var(--ink-faint);text-align:right;margin-top:4px}
+.bub.agent{background:var(--wa-agent);align-self:flex-start;border-top-left-radius:4px}
+.bub.owner{background:var(--wa-owner);align-self:flex-end;border-top-right-radius:4px}
+.bub b{font-weight:700}
+.chat-input{display:flex;align-items:center;gap:10px;background:#fff;border-top:1px solid var(--line);padding:10px 14px;font-size:13.5px;color:var(--ink-faint)}
+.chat-input .send{margin-left:auto;width:32px;height:32px;border-radius:50%;background:var(--coral);color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px}
+
+/* sections */
+section{padding:88px 0}
+section.alt{background:var(--paper-alt);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.eyebrow{display:inline-block;font-size:12.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--coral);margin-bottom:18px}
+h2{font-size:clamp(27px,3.4vw,40px);line-height:1.14;letter-spacing:-.018em;font-weight:800;max-width:21em}
+.section-sub{font-size:17px;color:var(--ink-soft);max-width:38em;margin-top:18px}
+.pain-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:60px;align-items:start}
+blockquote{background:var(--paper);border:1px solid var(--line);border-left:4px solid var(--coral);border-radius:var(--radius);padding:26px 28px;font-size:16.5px;line-height:1.55;box-shadow:0 14px 34px -22px rgba(23,23,31,.22)}
+blockquote .who{display:flex;align-items:center;gap:10px;margin-top:16px;font-size:13.5px;color:var(--ink-faint);font-style:normal;font-family:var(--font-sans)}
+blockquote .who img{width:30px;height:30px;border-radius:50%;object-fit:cover}
+blockquote p{font-family:var(--font-serif);font-style:italic;font-size:18px;color:var(--ink)}
+
+/* pillar cards */
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:48px}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:26px;display:flex;flex-direction:column;gap:14px;transition:transform .2s ease,box-shadow .2s ease}
+.card:hover{transform:translateY(-4px);box-shadow:0 18px 44px -24px rgba(23,23,31,.25)}
+.card h3{font-size:18.5px;font-weight:800;letter-spacing:-.01em}
+.card>p{font-size:14.5px;color:var(--ink-soft);flex:1}
+.mini{background:var(--paper-alt);border:1px solid var(--line);border-radius:12px;padding:14px 15px;font-size:13px}
+.mini .row{display:flex;justify-content:space-between;gap:10px;padding:5px 0;border-bottom:1px dashed var(--line)}
+.mini .row:last-child{border-bottom:none}
+.mini .row b{font-weight:700}
+.mini .total{border-top:1.5px solid var(--ink);margin-top:4px;padding-top:8px}
+.pill{display:inline-block;border-radius:999px;padding:2px 10px;font-size:11.5px;font-weight:700}
+.pill.ok{background:#e3f6ea;color:var(--ok)}
+.pill.warn{background:#fdf1de;color:var(--warn)}
+.pill.bad{background:#fbe4e4;color:var(--bad)}
+.mini .alert-title{display:flex;align-items:center;gap:8px;font-weight:700;margin-bottom:6px}
+.mini .alert-title::before{content:'⚠';color:var(--warn)}
+.mini .cta-line{margin-top:10px;font-weight:700;color:var(--coral);font-size:12.5px}
+
+/* market */
+.market-grid{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center}
+.market p{font-size:16.5px;color:var(--ink-soft);margin-top:20px}
+.market p b{color:var(--ink)}
+.big-number{background:var(--ink);color:#fff;border-radius:var(--radius);padding:40px 36px}
+.big-number .n{font-family:var(--font-serif);font-style:italic;font-size:clamp(38px,4.5vw,56px);line-height:1.05;color:#ffd9d1}
+.big-number .l{font-size:14px;color:#b9b9c4;margin-top:12px;max-width:26em}
+
+/* form */
+.form-card{background:var(--paper);border:1px solid var(--line);border-radius:22px;padding:44px;max-width:660px;margin:44px auto 0;box-shadow:0 24px 60px -30px rgba(23,23,31,.25)}
+.field{margin-bottom:18px}
+.field label{display:block;font-size:13px;font-weight:700;margin-bottom:7px;color:var(--ink-soft)}
+.field input[type=text],.field input[type=tel]{width:100%;border:1.5px solid var(--line);border-radius:12px;padding:13px 15px;font-size:15px;font-family:var(--font-sans);background:var(--paper-alt)}
+.field input:focus{border-color:var(--coral);outline:none;background:#fff}
+.choices{display:flex;gap:8px;flex-wrap:wrap}
+.choices label{border:1.5px solid var(--line);border-radius:999px;padding:9px 16px;font-size:13.5px;font-weight:600;cursor:pointer;color:var(--ink-soft);background:var(--paper-alt)}
+.choices input{display:none}
+.choices input:checked+span{color:#fff}
+.choices label:has(input:checked){background:var(--ink);border-color:var(--ink);color:#fff}
+.check{display:flex;align-items:center;gap:10px;font-size:14.5px;font-weight:600;margin:22px 0}
+.check input{width:18px;height:18px;accent-color:var(--coral)}
+.form-card .btn{width:100%;padding:15px;font-size:15.5px}
+.form-note{text-align:center;font-size:13px;color:var(--ink-faint);margin-top:16px}
+.form-success{display:none;text-align:center;padding:30px 10px}
+.form-success .em{font-size:40px}
+.form-success h3{font-size:20px;margin:10px 0 6px}
+.form-success p{font-size:14.5px;color:var(--ink-soft)}
+.center{text-align:center}
+.center h2,.center .section-sub{margin-left:auto;margin-right:auto}
+
+/* footer */
+footer{border-top:1px solid var(--line);padding:36px 0;font-size:13.5px;color:var(--ink-faint)}
+.foot{display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap}
+.foot img{height:22px}
+.foot nav{display:flex;gap:22px;flex-wrap:wrap}
+.foot nav a:hover{color:var(--coral)}
+.foot nav a.on{color:var(--ink);font-weight:700}
+
+/* reveal */
+.reveal{opacity:0;transform:translateY(14px);transition:opacity .55s ease,transform .55s ease}
+.reveal.in{opacity:1;transform:none}
+
+@media(max-width:900px){
+  .hero{padding:44px 0 56px}
+  .hero-grid,.pain-grid,.market-grid{grid-template-columns:1fr;gap:40px}
+  .phone{margin:0 auto}
+  .cards{grid-template-columns:1fr}
+  section{padding:64px 0}
+  .form-card{padding:28px 22px}
+  .nav-tag{display:none}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap nav">
+    <a href="index.html"><img src="https://thalysonssouzatrusted.github.io/Polpo/polpo-logo-dark.svg" alt="Polpo" onerror="this.outerHTML='<span style=&quot;font-weight:800;font-size:19px;letter-spacing:-.02em&quot;>polpo <span style=&quot;font-size:16px&quot;>🐙</span></span>'"></a>
+    <div class="nav-right">
+      <span class="nav-tag">lista de espera · 2026</span>
+      <a class="btn btn-sm" href="#lista">Garantir minha vaga</a>
+    </div>
+  </div>
+</header>
+
+<main>
+<!-- HERO -->
+<div class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <div class="eyebrow-badge"><img src="https://thalysonssouzatrusted.github.io/Polpo/Rodrigo.png" alt="Rodrigo" onerror="this.style.display='none'"><span>Para quem vende bem e não entende por que o caixa não fecha</span></div>
+      <h1>Você sabe quanto <em>custa cada prato</em> que sai da sua cozinha — com o preço dos insumos de <em>hoje?</em></h1>
+      <p class="sub">O Rodrigo recalcula o custo real dos seus pratos toda semana, com base no que você efetivamente pagou nas últimas compras — e te mostra exatamente onde a margem está vazando.</p>
+      <div class="hero-ctas">
+        <a class="btn" href="#lista">Quero saber onde estou perdendo</a>
+        <a class="link-how" href="#como">Como funciona</a>
+      </div>
+    </div>
+    <div class="phone reveal">
+      <div class="phone-status"><span>09:41</span><span>●●● ▲ ▮</span></div>
+      <div class="chat-head">
+        <img src="https://thalysonssouzatrusted.github.io/Polpo/Rodrigo.png" alt="Rodrigo" onerror="this.style.display='none'">
+        <div><div class="nm">Rodrigo · Estoque Polpo</div><div class="st">online agora</div></div>
+      </div>
+      <div class="chat-body">
+      <div class="bub agent">Bom dia! Fechamento de CMV da semana pronto. 📊<br><b>CMV: 41%</b> — 5 pontos acima da sua meta de 36%.<span class="t">08:00</span></div>
+      <div class="bub agent">Encontrei a origem: o custo da linha de proteínas subiu 12% e o consumo real de picanha está 9% acima do que as fichas técnicas preveem. Provável desperdício ou porcionamento fora do padrão.<span class="t">08:01</span></div>
+      <div class="bub agent">Duas ações que resolvem: (1) conferir o porcionamento da picanha no turno da noite; (2) o prato Parrilla está com margem de 18% — o preço de equilíbrio seria R$ 35,90. <b>Quer que eu monte a simulação do novo cardápio?</b><span class="t">08:02</span></div>
+      <div class="bub owner">Monta sim<span class="t">08:15 ✓✓</span></div>
+      <div class="bub agent">Pronto, te mando em 10 min com o impacto na margem prato a prato. 🐙<span class="t">08:16</span></div>
+      </div>
+      <div class="chat-input"><span>Mensagem</span><span class="send">▶</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- DOR -->
+<section class="alt">
+  <div class="wrap pain-grid">
+    <div class="reveal">
+      <span class="eyebrow">Diagnóstico invisível</span>
+      <h2>O CMV saudável fica entre <em>28% e 35%.</em> Acima disso, o lucro desaparece — e ninguém vê acontecendo.</h2>
+      <p class="section-sub">Insumo caro não dói na hora da compra. Dói no fechamento — quando o mês foi bom de venda, o salão ficou cheio e mesmo assim o caixa não fechou. E aí ninguém sabe apontar o motivo, porque o vazamento aconteceu em centavos, prato a prato, todos os dias.</p>
+      <p class="section-sub">Planilha não resolve: quando você termina de atualizar os preços, o fornecedor já reajustou de novo. Vender bem com margem furada é encher balde furado — quanto mais você vende, mais escorre.</p>
+    </div>
+    <blockquote class="reveal">
+      <p>“Seu CMV subiu para 41% esta semana, 5 pontos acima da meta. A origem está nas proteínas — te mostro prato a prato.”</p>
+      <div class="who"><img src="https://thalysonssouzatrusted.github.io/Polpo/Rodrigo.png" alt="Rodrigo" onerror="this.style.display='none'"><span>Rodrigo, agente de estoque do Polpo</span></div>
+    </blockquote>
+  </div>
+</section>
+
+<!-- EXECUÇÃO -->
+<section id="como">
+  <div class="wrap">
+    <span class="eyebrow">Execução contínua</span>
+    <h2>O que o Rodrigo acompanha pra você <em>toda semana.</em></h2>
+    <p class="section-sub">Custo real, não estimativa. Calculado com o preço que você pagou — puxado direto das suas notas fiscais.</p>
+    <div class="cards">
+      <div class="card reveal">
+        <h3>Custo real por prato</h3>
+        <p>Cada nota fiscal que entra atualiza o custo dos seus pratos automaticamente. Você vê o custo de hoje, com o preço de hoje — não a estimativa de quando montou a ficha técnica.</p>
+        <div class="mini"><div class="row"><span>Pão brioche</span><b>R$ 1,40</b></div>
+            <div class="row"><span>Blend 160g</span><b>R$ 4,50</b></div>
+            <div class="row"><span>Queijo, molho e salada</span><b>R$ 1,85</b></div>
+            <div class="row"><span>Embalagem</span><b>R$ 0,95</b></div>
+            <div class="row total"><span>Custo total · margem 34%</span><b>R$ 8,70</b></div></div>
+      </div>
+      <div class="card reveal">
+        <h3>Alerta de insumos</h3>
+        <p>Se um insumo relevante sobe acima do padrão, o Rodrigo avisa na hora — com o impacto direto nos pratos que usam aquele item, não só o preço do quilo.</p>
+        <div class="mini"><div class="alert-title">Alerta de preço</div>
+            <div class="row"><span>Cebola roxa</span><b style="color:var(--bad)">+15% em 7 dias</b></div>
+            <div class="row"><span>Afeta</span><b>6 pratos</b></div>
+            <div class="row"><span>Impacto no CMV</span><b>+0,4 pt</b></div></div>
+      </div>
+      <div class="card reveal">
+        <h3>Sugestão de preço</h3>
+        <p>Quando a margem de um prato cai abaixo da sua meta, o Rodrigo calcula o preço de equilíbrio e sugere o reajuste — com o novo CMV projetado. Você decide; ele faz a conta.</p>
+        <div class="mini"><div class="row"><span>Preço atual</span><b>R$ 32,00</b></div>
+            <div class="row"><span>Sugerido</span><b style="color:var(--coral)">R$ 35,90</b></div>
+            <div class="row"><span>Nova margem</span><span class="pill ok">32%</span></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MERCADO -->
+<section class="alt market">
+  <div class="wrap market-grid">
+    <div class="reveal">
+      <span class="eyebrow">Mercado</span>
+      <h2>Por que o cardápio de <em>dois anos atrás</em> está te custando caro agora.</h2>
+      <p>O preço dos insumos mudou dezenas de vezes desde que você precificou o cardápio. O preço dos seus pratos, provavelmente, não. Sem acompanhar o CMV semana a semana, você precifica no sentimento — e o sentimento não percebe inflação de 0,8% ao mês.</p>
+      <p>Restaurantes que não rastreiam CMV de forma ativa operam de 8 a 15 pontos de margem abaixo do potencial. Em um faturamento de R$ 100 mil/mês, isso é <b>R$ 8 a 15 mil deixados na mesa, todo mês</b>. O Rodrigo fecha essa lacuna sem você preencher uma planilha sequer — as notas fiscais fazem o trabalho.</p>
+    </div>
+    <div class="big-number reveal">
+      <div class="n">8 – 15 pts<br>de margem</div>
+      <div class="l">É o que restaurantes sem rastreio ativo de CMV deixam na mesa. Em R$ 100 mil/mês de faturamento: R$ 8 a 15 mil, todo mês.</div>
+    </div>
+  </div>
+</section>
+
+<!-- FORM -->
+<section id="lista">
+  <div class="wrap center">
+    <span class="eyebrow">Onboarding controlado</span>
+    <h2>Entre na lista e receba o <em>custo real dos seus pratos principais.</em></h2>
+    <p class="section-sub">O Polpo está em acesso antecipado para restaurantes selecionados. Quando sua vaga abrir, o Rodrigo já chega com o custo estimado dos seus pratos mais vendidos, calculado a partir das suas primeiras notas — pra você ver a margem real antes de decidir qualquer coisa.</p>
+    <div class="form-card" style="text-align:left">
+      <div class="form-fields">
+        <div class="field"><label>Nome do restaurante</label><input type="text" placeholder="Ex.: Cantina do Zé"></div>
+        <div class="field"><label>WhatsApp (com DDD)</label><input type="tel" placeholder="(11) 90000-0000"></div>
+        <div class="field"><label>Quantas lojas?</label>
+          <div class="choices">
+            <label><input type="radio" name="lojas" checked><span>1 loja</span></label>
+            <label><input type="radio" name="lojas"><span>2 lojas</span></label>
+            <label><input type="radio" name="lojas"><span>3 lojas</span></label>
+            <label><input type="radio" name="lojas"><span>4 ou mais</span></label>
+          </div>
+        </div>
+        <div class="field"><label>Faturamento mensal aproximado <span style="font-weight:400;color:var(--ink-faint)">(opcional)</span></label>
+          <div class="choices">
+            <label><input type="radio" name="fat"><span>até 30 mil</span></label>
+            <label><input type="radio" name="fat"><span>30–80 mil</span></label>
+            <label><input type="radio" name="fat"><span>80–150 mil</span></label>
+            <label><input type="radio" name="fat"><span>+150 mil</span></label>
+          </div>
+        </div>
+        <label class="check"><input type="checkbox" checked> Opero no iFood</label>
+        <button class="btn" onclick="return submitWaitlist(this)">Quero o custo real dos meus pratos</button>
+        <p class="form-note">Sem spam. Sem vendedor ligando. Quando sua vaga abrir, o Rodrigo chega com números — não com apresentação de vendas.</p>
+      </div>
+      <div class="form-success">
+        <div class="em">🐙</div>
+        <h3>Você está na lista!</h3>
+        <p>Quando sua vaga abrir, o Rodrigo chega no seu WhatsApp com o custo real estimado dos seus pratos mais vendidos.</p>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap foot">
+    <img src="https://thalysonssouzatrusted.github.io/Polpo/polpo-logo-dark.svg" alt="Polpo" onerror="this.outerHTML='<span style=&quot;font-weight:800;font-size:19px;letter-spacing:-.02em&quot;>polpo <span style=&quot;font-size:16px&quot;>🐙</span></span>'">
+    <nav>
+      <a href="index.html">Visão Geral</a>
+      <a href="delivery.html" class="">Agente Delivery</a>
+      <a href="conciliacao.html" class="">Agente de Conciliação</a>
+      <a href="cmv.html" class="on">Agente de CMV</a>
+    </nav>
+    <span>© 2026 Polpo. Todos os direitos reservados.</span>
+  </div>
+</footer>
+<script>
+document.querySelectorAll('.reveal').forEach(function(el){
+  var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{threshold:.12});
+  io.observe(el);
+});
+function submitWaitlist(btn){
+  var card=btn.closest('.form-card');
+  card.querySelector('.form-fields').style.display='none';
+  card.querySelector('.form-success').style.display='block';
+  return false;
+}
+</script>
+</body>
+</html>

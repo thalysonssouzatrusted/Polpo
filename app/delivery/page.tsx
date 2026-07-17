@@ -1,32 +1,8 @@
 "use client";
 
 import { WaitlistForm } from "@/components/WaitlistForm";
-import { useEffect, useState, useRef } from "react";
 
 export default function DeliveryLandingPage() {
-  const [scrollProgress, setScrollProgress] = useState(0);
-  const heroRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      if (!heroRef.current) return;
-      const rect = heroRef.current.getBoundingClientRect();
-      const windowHeight = window.innerHeight;
-      
-      const scrolled = -rect.top;
-      const totalScrollable = rect.height - windowHeight;
-      
-      let progress = scrolled / totalScrollable;
-      if (progress < 0) progress = 0;
-      if (progress > 1) progress = 1;
-      
-      setScrollProgress(progress);
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    handleScroll();
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
 
   const scrollToWaitlist = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -39,35 +15,34 @@ export default function DeliveryLandingPage() {
   return (
     <>
       <main className="fade-in-entry">
-        {/* SEÇÃO 1: Hero Text (Normal Flow) */}
-        <section className="section" style={{ paddingTop: "120px", paddingBottom: "40px", textAlign: "center", display: "flex", flexDirection: "column", alignItems: "center" }}>
-          <div className="container" style={{ maxWidth: "800px" }}>
-            <div className="hero-hook reveal reveal-up" style={{ paddingBottom: "10px", position: "relative" }}>
-              <img src="/Polpo/Leo.png" alt="Léo" className="floating-avatar" />
-              <span className="eyebrow" style={{ margin: "0 auto 16px auto" }}>Pare de assumir o prejuízo das plataformas</span>
+        {/* SEÇÃO 1: Hero Card (Nearo Style) */}
+        <section style={{ paddingTop: "92px", paddingBottom: "0" }}>
+          <div className="hero-card">
+            <div className="hero-card-content">
+              <img src="/Polpo/Leo.png" alt="Agente Polpo" className="floating-avatar" />
+              <div className="hero-badge">
+                <span className="hero-badge-accent"></span>
+                Pare de assumir o prejuízo das plataformas
+              </div>
               <h1 className="hero-main-title">
-                Você paga a conta dos <em className="logo-font-highlight">extravios e cancelamentos</em> do seu delivery?
+                Quantos pedidos cancelados você pagou do próprio bolso <em className="logo-font-highlight">este mês?</em>
               </h1>
-              <p className="lead" style={{ fontSize: "19px", marginBottom: "32px" }}>
-                O Polpo monitora cada pedido, detecta fraudes e automatiza suas disputas para recuperar o seu dinheiro.
+              <p className="lead">
+                O Agente Polpo audita cada pedido do seu delivery, separa os cancelamentos com chance de contestação e monta a disputa automaticamente.
               </p>
-              <div style={{ display: "flex", gap: "16px", alignItems: "center", justifyContent: "center" }}>
+              <div className="hero-buttons">
                 <button onClick={scrollToWaitlist} className="btn btn-primary">
-                  Quero estancar as perdas
+                  Quero auditar meus cancelamentos
                 </button>
                 <button onClick={(e) => { e.preventDefault(); document.getElementById("problema")?.scrollIntoView({ behavior: "smooth" }); }} className="btn btn-outline">
                   Como funciona
                 </button>
               </div>
             </div>
-          </div>
-        </section>
 
-        {/* SEÇÃO 2: Sticky Phone Animation */}
-        <section ref={heroRef} style={{ height: "250vh", position: "relative", backgroundColor: "var(--accent)", borderTopLeftRadius: "40px", borderTopRightRadius: "40px", marginTop: "40px" }}>
-          <div style={{ position: "sticky", top: 0, height: "100vh", display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden" }}>
-            <div className="sticky-phone-container">
-              <div className="phone-mockup reveal reveal-scale delay-200" style={{ boxShadow: "0 24px 64px rgba(0,0,0,0.3)" }}>
+            {/* Phone Mockup inside the card */}
+            <div className="hero-phone-wrapper">
+              <div className="phone-mockup" style={{ boxShadow: "none" }}>
                 <div className="phone-notch" />
                 <div className="phone-screen">
                   <div className="phone-statusbar">
@@ -78,22 +53,34 @@ export default function DeliveryLandingPage() {
                       <img src="/Polpo/Leo.png" alt="Leo" style={{ width: "36px", height: "36px", borderRadius: "50%", objectFit: "cover" }} />
                     </div>
                     <div>
-                      <div className="phone-wa-name">Léo · Operações Polpo</div>
+                      <div className="phone-wa-name">Agente Polpo · Operações</div>
                       <div className="phone-wa-status">online agora</div>
                     </div>
                   </div>
                   <div className="phone-chat">
-                    <div className={`phone-bubble in chat-bubble-animated ${scrollProgress > 0.1 ? 'visible' : ''}`}>
-                      Liguei para o iFood e contestamos os 3 cancelamentos indevidos de ontem.
-                      <div className="phone-bubble-alert" style={{ borderColor: "#28a745", backgroundColor: "rgba(40,167,69,0.1)" }}>
-                        <strong>Status:</strong> R$ 145,00 reembolsados.<br />
-                        <span style={{ color: "#28a745", fontSize: "12px" }}>Já está na sua conta.</span>
-                      </div>
-                      <div className="phone-bubble-time">10:00</div>
+                    <div className="phone-bubble in">
+                      Bom dia! Auditoria do delivery de ontem pronta. 🛵<br/>
+                      <strong>3 cancelamentos</strong> depois do preparo, total de <strong>R$ 145,00</strong>.<br/>
+                      2 têm chance alta de reembolso.
+                      <div className="phone-bubble-time">08:02</div>
                     </div>
-                    <div className={`phone-bubble in chat-bubble-animated ${scrollProgress > 0.4 ? 'visible' : ''}`} style={{ marginTop: 8 }}>
-                      Notei que 4 pedidos atrasaram mais de 20 min. Ajustei o tempo de preparo na plataforma para evitar punição no algoritmo.
-                      <div className="phone-bubble-time">10:02</div>
+                    <div className="phone-bubble out" style={{ marginTop: 8 }}>
+                      Consegue contestar pra mim?
+                      <div className="phone-bubble-time">08:10</div>
+                    </div>
+                    <div className="phone-bubble in" style={{ marginTop: 8 }}>
+                      Já montei as disputas com as provas. ✅<br/>
+                      Pedido #4521 — cliente alegou não entrega, mas rastreio mostra entrega às 19:42.<br/>
+                      Pedido #4533 — cancelado 38min após aceite.
+                      <div className="phone-bubble-time">08:11</div>
+                    </div>
+                    <div className="phone-bubble out" style={{ marginTop: 8 }}>
+                      Quanto posso recuperar?
+                      <div className="phone-bubble-time">08:12</div>
+                    </div>
+                    <div className="phone-bubble in" style={{ marginTop: 8 }}>
+                      Estimativa: <strong>R$ 98,00</strong> dos R$ 145,00. Enviei as contestações agora. 🐙
+                      <div className="phone-bubble-time">08:12</div>
                     </div>
                   </div>
                   <div className="phone-input-bar">
@@ -113,38 +100,37 @@ export default function DeliveryLandingPage() {
               <div className="reveal reveal-up delay-100">
                 <span className="eyebrow">Prejuízo silencioso</span>
                 <h2 style={{ fontSize: "clamp(24px, 3vw, 32px)", lineHeight: 1.2, marginBottom: "16px" }}>
-                  Extravios, golpes e cancelamentos caem direto <em className="logo-font-highlight">na sua conta.</em>
+                  Extravio, golpe e cancelamento indevido caem <em className="logo-font-highlight">na sua conta</em>.
                 </h2>
                 <p className="lead" style={{ fontSize: "18px", marginBottom: "16px" }}>
-                  Muitos pedidos são cancelados injustamente e a plataforma joga o prejuízo para você.
-                </p>
-                <p style={{ color: "var(--text-muted)", fontSize: "15px" }}>
-                  Você não tem tempo de conferir cada pedido no portal e abrir disputa. O Polpo detecta as fraudes e facilita a recuperação do seu dinheiro.
+                  Clientes que não receberam, motoboys que somem e cancelamentos após o preparo. Quem paga é você, a menos que conteste no prazo com as provas certas.
                 </p>
               </div>
               <div className="reveal reveal-up delay-200">
-                <blockquote className="editorial-quote" style={{ margin: 0, paddingLeft: "24px", borderLeft: "4px solid var(--accent)", fontSize: "20px" }}>
-                  "3 cancelamentos ontem. R$134 em aberto. 2 têm chance real de disputa."<br/>
-                  <br/>
-                  <span style={{ fontSize: "14px", fontStyle: "normal", color: "var(--text-muted)" }}>O Léo, agente de delivery do Polpo</span>
-                </blockquote>
+                <div className="feature-card" style={{ padding: "24px", borderRadius: "16px", background: "var(--bg-card)", border: "1px solid var(--border)", boxShadow: "0 4px 12px rgba(0,0,0,0.05)", height: "fit-content" }}>
+                  <div style={{ fontSize: "16px", lineHeight: 1.5, color: "var(--text)", fontWeight: 400 }}>
+                    "3 cancelamentos ontem. R$ 145 em jogo. 2 têm chance real de disputa. Já montei as provas."
+                  </div>
+                  <div style={{ fontSize: "14px", marginTop: "16px", color: "var(--text-muted)", fontWeight: 600 }}>
+                    Agente Polpo
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </section>
 
-        {/* SEÇÃO 3: A Solução (O Léo) */}
+        {/* SEÇÃO 3: A Solução (O Agente Polpo) */}
         <section className="section section-alt">
           <div className="container">
             <div className="section-header-split reveal reveal-up">
               <div>
                 <span className="eyebrow">Execução contínua</span>
                 <h2 style={{ fontSize: "clamp(28px, 4vw, 42px)", lineHeight: 1.1, marginBottom: 20 }}>
-                  Três coisas que o Léo resolve pra você <em className="logo-font-highlight">todo dia.</em>
-                  Três pilares para blindar seu <em className="logo-font-highlight">faturamento.</em>
+                  Três coisas que o Agente Polpo resolve pra você <em className="logo-font-highlight">todo dia.</em>
                 </h2>
                 <p style={{ fontSize: "18px", color: "var(--text-muted)" }}>
-                  Automação focada no seu caixa. Chega de surpresas e margens espremidas.
+                  Auditoria diária do seu delivery, focada em uma coisa: dinheiro que era seu voltar pra sua conta.
                 </p>
               </div>
               <div>
@@ -152,29 +138,31 @@ export default function DeliveryLandingPage() {
               </div>
             </div>
             
-            <div className="grid-3" style={{ marginTop: "40px" }}>
-              <div className="feature-card reveal reveal-up delay-100">
-                <h3>Alerta de Extravios</h3>
-                <p>Pedidos que saíram para entrega e foram reportados como não recebidos. Identificamos se o erro foi da plataforma.</p>
+            <div className="bento-grid" style={{ marginTop: "40px" }}>
+              <div className="feature-card bento-card-large reveal reveal-up delay-100">
+                <h3>Radar de Extravios</h3>
+                <p>Cruzamos dados de despacho e rastreio para identificar erros da plataforma e sinalizar contestações.</p>
                 <div className="feature-card-ui-wrapper">
                   <div className="ui-mock-item anim-slide-up" style={{ animationDelay: "0.1s" }}>
-                    <span>Pedido #8902</span>
-                    <span className="ui-mock-badge warning">Extraviado</span>
+                    <span className="ui-icon" style={{ background: "#fee2e2", color: "#ef4444" }}>✕</span>
+                    <div>
+                      <strong>Pedido #4092</strong>
+                      <span style={{ display: "block", fontSize: "10px", color: "var(--text-muted)" }}>Cliente reportou não recebido</span>
+                    </div>
                   </div>
-                  <div className="ui-mock-item anim-slide-up" style={{ animationDelay: "0.3s" }}>
-                    <span>Pedido #8903</span>
-                    <span className="ui-mock-badge success">Entregue</span>
-                  </div>
-                  <div className="ui-mock-item anim-slide-up" style={{ animationDelay: "0.5s" }}>
-                    <span>Pedido #8904</span>
-                    <span className="ui-mock-badge warning">Extraviado</span>
+                  <div className="ui-mock-item anim-slide-up" style={{ animationDelay: "0.3s", background: "#f0fdf4", borderColor: "#bbf7d0" }}>
+                    <span className="ui-icon" style={{ background: "#dcfce7", color: "#22c55e" }}>✓</span>
+                    <div>
+                      <strong>Comprovante Encontrado</strong>
+                      <span style={{ display: "block", fontSize: "10px", color: "var(--text-muted)" }}>Despachado 19:42 — Pronto para contestar</span>
+                    </div>
                   </div>
                 </div>
               </div>
               
               <div className="feature-card reveal reveal-up delay-200">
-                <h3>Rastreio de Cancelamentos</h3>
-                <p>Filtramos cancelamentos indevidos após o preparo e que têm grandes chances de sucesso na contestação.</p>
+                <h3>Filtro de Cancelamentos</h3>
+                <p>Filtramos cancelamentos indevidos após o preparo. Foco apenas no que tem chance de reembolso.</p>
                 <div className="feature-card-ui-wrapper" style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
                   <div className="ui-mock-item anim-slide-up" style={{ width: "100%", flexDirection: "column", alignItems: "flex-start", gap: "8px", animationDelay: "0.2s" }}>
                     <div style={{ display: "flex", justifyContent: "space-between", width: "100%" }}>
@@ -182,14 +170,14 @@ export default function DeliveryLandingPage() {
                       <div className="anim-pulse-dot"></div>
                     </div>
                     <div style={{ fontSize: "12px", color: "var(--text-muted)" }}>2 cancelamentos indevidos detectados.</div>
-                    <button style={{ width: "100%", padding: "6px", background: "var(--accent)", color: "#000", border: "none", borderRadius: "4px", fontSize: "11px", fontWeight: "bold", marginTop: "8px", cursor: "default" }}>Contestar no Portal</button>
+                    <div style={{ width: "100%", color: "var(--accent)", fontSize: "12px", fontWeight: "bold", marginTop: "4px" }}>Revisar contestação →</div>
                   </div>
                 </div>
               </div>
               
               <div className="feature-card reveal reveal-up delay-300">
-                <h3>Disputas Facilitadas</h3>
-                <p>Reunimos os dados que você precisa para provar que o pedido foi feito e enviado corretamente sem perder dinheiro.</p>
+                <h3>Disputa Pronta</h3>
+                <p>Reunimos as provas e montamos a contestação. Você aprova, nós acompanhamos.</p>
                 <div className="feature-card-ui-wrapper">
                   <div className="ui-mock-item anim-slide-up" style={{ flexDirection: "column", alignItems: "flex-start", gap: "8px", animationDelay: "0.3s" }}>
                     <div style={{ display: "flex", justifyContent: "space-between", width: "100%", borderBottom: "1px solid var(--border)", paddingBottom: "8px" }}>
@@ -198,11 +186,45 @@ export default function DeliveryLandingPage() {
                     </div>
                     <div style={{ display: "flex", justifyContent: "space-between", width: "100%", fontSize: "11px", color: "var(--text-muted)" }}>
                       <span>Status</span>
-                      <span style={{ color: "#27c93f" }}>Aprovada</span>
+                      <span className="ui-mock-badge" style={{ backgroundColor: "#fdf1de", color: "#c77700", padding: "2px 6px" }}>Aberta</span>
                     </div>
                     <div style={{ display: "flex", justifyContent: "space-between", width: "100%", fontSize: "11px", color: "var(--text-muted)" }}>
-                      <span>Reembolso</span>
-                      <span style={{ color: "#27c93f" }}>Previsto p/ dia 10</span>
+                      <span>Resposta prevista</span>
+                      <span style={{ fontWeight: "bold" }}>5 dias úteis</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="feature-card bento-card-large reveal reveal-up delay-400">
+                <h3>Tudo via WhatsApp</h3>
+                <p>Aprove disputas de cancelamento em segundos diretamente pelo seu celular. Nada de portais lentos e burocráticos.</p>
+                <div className="feature-card-ui-wrapper" style={{ background: "transparent", border: "none", padding: 0, marginTop: "16px", display: "flex", justifyContent: "center" }}>
+                  <div className="mobile-decision-mockup anim-slide-up" style={{ 
+                    background: "#ffffff", 
+                    borderRadius: "16px", 
+                    padding: "16px", 
+                    boxShadow: "0 8px 24px rgba(0,0,0,0.04)", 
+                    border: "1px solid rgba(0,0,0,0.06)",
+                    width: "100%",
+                    maxWidth: "300px",
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "12px"
+                  }}>
+                    <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", fontSize: "10px", color: "var(--text-muted)" }}>
+                      <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+                        <div style={{ width: "16px", height: "16px", borderRadius: "4px", background: "var(--accent)" }}></div>
+                        <strong>Agente Polpo</strong>
+                      </div>
+                      <span>Agora</span>
+                    </div>
+                    <p style={{ fontSize: "12px", color: "var(--text)", lineHeight: "1.4", margin: 0 }}>
+                      Cancelamento indevido detectado. Pedido <strong>#4092</strong>.<br/>Contestação pré-preenchida.
+                    </p>
+                    <div style={{ display: "flex", gap: "8px", marginTop: "4px" }}>
+                      <button style={{ flex: 1, padding: "8px", borderRadius: "8px", background: "#f5f5f5", color: "#666", fontSize: "11px", fontWeight: "600", border: "none", cursor: "pointer", transition: "background 0.2s" }}>Descartar</button>
+                      <button style={{ flex: 1, padding: "8px", borderRadius: "8px", background: "#1a1a1a", color: "#ffffff", fontSize: "11px", fontWeight: "600", border: "none", cursor: "pointer", transition: "background 0.2s" }}>Contestar</button>
                     </div>
                   </div>
                 </div>
@@ -224,12 +246,12 @@ export default function DeliveryLandingPage() {
                 <div style={{ display: "flex", flexDirection: "column", gap: "24px", marginTop: "32px" }}>
                   <div style={{ borderTop: "1px solid var(--border)", paddingTop: "16px" }}>
                     <p style={{ fontSize: "16px", lineHeight: 1.5, color: "var(--text)", fontWeight: 500 }}>
-                      Restaurantes de médio porte perdem todos os meses milhares de reais apenas aceitando calados os cancelamentos, fraudes de clientes e extravios de motoboys.
+                      Cerca de 1% a 3% dos pedidos de delivery terminam em cancelamento ou extravio. Para um faturamento de R$ 60 mil/mês, são <strong>R$ 600 a R$ 1.800 perdidos mensalmente</strong>. A maior parte pode ser contestada no prazo certo.
                     </p>
                   </div>
                   <div style={{ borderTop: "1px solid var(--border)", paddingTop: "16px", paddingBottom: "16px" }}>
                     <p style={{ fontSize: "15px", lineHeight: 1.5, color: "var(--text-muted)" }}>
-                      O Polpo foi construído para virar o jogo. Nós vasculhamos a operação diariamente em busca de anomalias, garantindo que você tenha as ferramentas para contestar o que é seu.
+                      O Agente Polpo existe para ser esse alguém. Ele vasculha sua operação todos os dias, separa o que é recuperável e não deixa prazo de contestação vencer em silêncio.
                     </p>
                   </div>
                 </div>
@@ -248,16 +270,16 @@ export default function DeliveryLandingPage() {
             <div className="form-container reveal reveal-up">
               <div className="form-title">
                 <span className="eyebrow">Onboarding Controlado</span>
-                <h3>Entre na lista. <em className="logo-font-highlight">Sem compromisso.</em></h3>
+                <h3>Entre na lista e receba a <em className="logo-font-highlight">auditoria dos seus últimos 30 dias.</em></h3>
                 <p style={{ color: "var(--text-muted)", fontSize: "14px" }}>
-                  O Polpo está em fase de acesso antecipado para restaurantes selecionados. Você entra na fila e a gente avisa quando sua vaga abrir.
+                  O Polpo está em acesso antecipado. Quando sua vaga abrir, o Agente Polpo entregará uma auditoria mostrando suas perdas com cancelamentos e o que poderia ter sido recuperado.
                 </p>
               </div>
               
               <WaitlistForm buttonText="Quero minha vaga" />
 
               <div style={{ marginTop: "24px", fontSize: "12px", color: "var(--text-muted)", textAlign: "center" }}>
-                Sem spam. Sem vendedor ligando. Quando abrirmos sua vaga, o Léo entra em contato direto.
+                Sem spam. Sem vendedor ligando. Quando sua vaga abrir, o Agente Polpo trará números reais em vez de discursos de vendas.
               </div>
             </div>
           </div>

@@ -2,10 +2,20 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
+import { useState, useEffect } from "react";
 
 export function SiteHeader() {
   const pathname = usePathname();
   const router = useRouter();
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 10);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   const scrollToWaitlist = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -18,7 +28,7 @@ export function SiteHeader() {
   };
 
   return (
-    <header className="fixed-header" style={{ height: "72px" }}>
+    <header className={`fixed-header ${scrolled ? "scrolled" : ""}`} style={{ height: "72px" }}>
       <div className="container header-container" style={{ height: "100%" }}>
         <div 
           className="logo" 
@@ -33,7 +43,7 @@ export function SiteHeader() {
 
         <div style={{ display: "flex", alignItems: "center", gap: "16px", justifyContent: "center" }}>
           <div className="header-meta" style={{ display: "flex", alignItems: "center", gap: "5px", margin: 0 }}>
-            <span>lista de espera · 2026</span>
+            <span>LISTA DE ESPERA · 2026</span>
           </div>
         </div>
 

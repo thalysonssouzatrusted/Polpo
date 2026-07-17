@@ -1,32 +1,8 @@
 "use client";
 
 import { WaitlistForm } from "@/components/WaitlistForm";
-import { useEffect, useState, useRef } from "react";
 
 export default function CmvLandingPage() {
-  const [scrollProgress, setScrollProgress] = useState(0);
-  const heroRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      if (!heroRef.current) return;
-      const rect = heroRef.current.getBoundingClientRect();
-      const windowHeight = window.innerHeight;
-      
-      const scrolled = -rect.top;
-      const totalScrollable = rect.height - windowHeight;
-      
-      let progress = scrolled / totalScrollable;
-      if (progress < 0) progress = 0;
-      if (progress > 1) progress = 1;
-      
-      setScrollProgress(progress);
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    handleScroll();
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
 
   const scrollToWaitlist = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -39,19 +15,22 @@ export default function CmvLandingPage() {
   return (
     <>
       <main className="fade-in-entry">
-        {/* SEÇÃO 1: Hero Text (Normal Flow) */}
-        <section className="section" style={{ paddingTop: "120px", paddingBottom: "40px", textAlign: "center", display: "flex", flexDirection: "column", alignItems: "center" }}>
-          <div className="container" style={{ maxWidth: "800px" }}>
-            <div className="hero-hook reveal reveal-up" style={{ paddingBottom: "10px", position: "relative" }}>
-              <img src="/Polpo/Rodrigo.png" alt="Rodrigo" className="floating-avatar" />
-              <span className="eyebrow" style={{ margin: "0 auto 16px auto" }}>Para quem vende bem e não entende por que o caixa não fecha</span>
+        {/* SEÇÃO 1: Hero Card (Nearo Style) */}
+        <section style={{ paddingTop: "92px", paddingBottom: "0" }}>
+          <div className="hero-card">
+            <div className="hero-card-content">
+              <img src="/Polpo/Rodrigo.png" alt="Agente Polpo" className="floating-avatar" />
+              <div className="hero-badge">
+                <span className="hero-badge-accent"></span>
+                Para quem vende bem e não entende por que o caixa não fecha
+              </div>
               <h1 className="hero-main-title">
-                Você sabe o quanto <em className="logo-font-highlight">custa cada prato</em> que sai da sua cozinha?
+                Você sabe quanto <em className="logo-font-highlight">custa cada prato</em> com os preços de <em className="logo-font-highlight">hoje?</em>
               </h1>
-              <p className="lead" style={{ fontSize: "19px", marginBottom: "32px" }}>
-                O Polpo calcula o custo real do que você serve e aponta exatamente onde a sua margem está vazando.
+              <p className="lead">
+                O Agente Polpo recalcula o custo dos pratos toda semana usando suas notas fiscais. Você vê onde a margem está vazando.
               </p>
-              <div style={{ display: "flex", gap: "16px", alignItems: "center", justifyContent: "center" }}>
+              <div className="hero-buttons">
                 <button onClick={scrollToWaitlist} className="btn btn-primary">
                   Quero saber onde estou perdendo
                 </button>
@@ -60,14 +39,10 @@ export default function CmvLandingPage() {
                 </button>
               </div>
             </div>
-          </div>
-        </section>
 
-        {/* SEÇÃO 2: Sticky Phone Animation */}
-        <section ref={heroRef} style={{ height: "250vh", position: "relative", backgroundColor: "var(--accent)", borderTopLeftRadius: "40px", borderTopRightRadius: "40px", marginTop: "40px" }}>
-          <div style={{ position: "sticky", top: 0, height: "100vh", display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden" }}>
-            <div className="sticky-phone-container">
-              <div className="phone-mockup reveal reveal-scale delay-200" style={{ boxShadow: "0 24px 64px rgba(0,0,0,0.3)" }}>
+            {/* Phone Mockup inside the card */}
+            <div className="hero-phone-wrapper">
+              <div className="phone-mockup" style={{ boxShadow: "none" }}>
                 <div className="phone-notch" />
                 <div className="phone-screen">
                   <div className="phone-statusbar">
@@ -75,25 +50,40 @@ export default function CmvLandingPage() {
                   </div>
                   <div className="phone-wa-header">
                     <div className="phone-wa-avatar" style={{ background: 'transparent', padding: 0 }}>
-                      <img src="/Polpo/Rodrigo.png" alt="Rodrigo" style={{ width: "36px", height: "36px", borderRadius: "50%", objectFit: "cover" }} />
+                      <img src="/Polpo/Rodrigo.png" alt="Agente Polpo" style={{ width: "36px", height: "36px", borderRadius: "50%", objectFit: "cover" }} />
                     </div>
                     <div>
-                      <div className="phone-wa-name">Rodrigo · Estoque Polpo</div>
+                      <div className="phone-wa-name">Agente Polpo · Estoque</div>
                       <div className="phone-wa-status">online agora</div>
                     </div>
                   </div>
                   <div className="phone-chat">
-                    <div className={`phone-bubble in chat-bubble-animated ${scrollProgress > 0.1 ? 'visible' : ''}`}>
-                      Bom dia! Fechamento de CMV da semana gerado. 📊
+                    <div className="phone-bubble in">
+                      Bom dia! Fechamento de CMV da semana pronto. 📊
                       <div className="phone-bubble-alert" style={{ borderColor: "#ffbd2e", backgroundColor: "rgba(255,189,46,0.1)" }}>
                         <strong>Alerta:</strong> CMV subiu para 41%<br />
-                        <span style={{ color: "var(--accent)", fontSize: "12px" }}>5 pontos acima do ideal.</span>
+                        <span style={{ color: "var(--accent)", fontSize: "12px" }}>5 pontos acima da meta de 36%.</span>
                       </div>
                       <div className="phone-bubble-time">08:00</div>
                     </div>
-                    <div className={`phone-bubble in chat-bubble-animated ${scrollProgress > 0.4 ? 'visible' : ''}`} style={{ marginTop: 8 }}>
-                      Vale olhar o desperdício na linha de proteínas, detectei fuga de margem ali.
-                      <div className="phone-bubble-time">08:01</div>
+                    <div className="phone-bubble out" style={{ marginTop: 8 }}>
+                      O que está pesando mais?
+                      <div className="phone-bubble-time">08:12</div>
+                    </div>
+                    <div className="phone-bubble in" style={{ marginTop: 8 }}>
+                      Proteínas subiram 22% no mês. Os 3 pratos mais impactados:<br/>
+                      • Filé Grelhado: CMV foi de 31% → <strong>39%</strong><br/>
+                      • Steak Burger: 28% → <strong>35%</strong><br/>
+                      • Frango Parmegiana: 26% → <strong>32%</strong>
+                      <div className="phone-bubble-time">08:13</div>
+                    </div>
+                    <div className="phone-bubble out" style={{ marginTop: 8 }}>
+                      Preciso reajustar preço?
+                      <div className="phone-bubble-time">08:15</div>
+                    </div>
+                    <div className="phone-bubble in" style={{ marginTop: 8 }}>
+                      Simulei: aumento de R$ 2,00 no Filé e R$ 1,50 no Burger normaliza o CMV em 35%. 🐙
+                      <div className="phone-bubble-time">08:15</div>
                     </div>
                   </div>
                   <div className="phone-input-bar">
@@ -112,41 +102,41 @@ export default function CmvLandingPage() {
             <div style={{ marginBottom: 48, maxWidth: "700px" }} className="reveal reveal-up">
               <span className="eyebrow">Diagnóstico invisível</span>
               <h2 style={{ fontSize: "clamp(24px, 3vw, 32px)", lineHeight: 1.2 }}>
-                O CMV ideal para a maioria dos restaurantes fica entre <em className="logo-font-highlight">28% e 35%</em>. Quando passa disso, a margem de lucro desaparece.
+                O CMV saudável fica entre <em className="logo-font-highlight">28% e 35%.</em> Acima disso, o lucro desaparece em silêncio.
               </h2>
             </div>
             
             <div className="grid-2" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "40px" }}>
               <div className="reveal reveal-up delay-100">
                 <p className="lead" style={{ fontSize: "18px", marginBottom: "16px" }}>
-                  O problema é que o alto custo dos ingredientes não dói na hora. Ele dói no fechamento. Quando o caixa não fecha e ninguém sabe explicar o motivo.
-                </p>
-                <p style={{ color: "var(--text-muted)", fontSize: "15px" }}>
-                  Mesmo com as vendas altas, operar com margem vazando é encher um balde furado. Acompanhar na planilha é muito lento e quando você descobre o mês já virou.
+                  Insumos caros pesam no fechamento. O salão lota, o mês é bom, mas a conta não fecha. O motivo quase nunca é óbvio, pois o vazamento ocorre aos poucos em cada prato.
                 </p>
               </div>
               <div className="reveal reveal-up delay-200">
-                <blockquote className="editorial-quote" style={{ margin: 0, paddingLeft: "24px", borderLeft: "4px solid var(--accent)", fontSize: "20px" }}>
-                  "Seu CMV subiu para 41% esta semana, 5 pontos acima do normal. É bom verificar o desperdício nas proteínas."<br/>
-                  <br/>
-                  <span style={{ fontSize: "14px", fontStyle: "normal", color: "var(--text-muted)" }}>O Rodrigo, agente de estoque do Polpo</span>
-                </blockquote>
+                <div className="feature-card" style={{ padding: "24px", borderRadius: "16px", background: "var(--bg-card)", border: "1px solid var(--border)", boxShadow: "0 4px 12px rgba(0,0,0,0.05)", height: "fit-content" }}>
+                  <div style={{ fontSize: "16px", lineHeight: 1.5, color: "var(--text)", fontWeight: 400 }}>
+                    "Seu CMV subiu para 41% esta semana, 5 pontos acima da meta. A origem está nas proteínas. Veja o custo por prato."
+                  </div>
+                  <div style={{ fontSize: "14px", marginTop: "16px", color: "var(--text-muted)", fontWeight: 600 }}>
+                    Agente Polpo
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </section>
 
-        {/* SEÇÃO 3: A Solução (O Rodrigo) */}
+        {/* SEÇÃO 3: A Solução (O Agente Polpo) */}
         <section className="section section-alt">
           <div className="container">
             <div className="section-header-split reveal reveal-up">
               <div>
                 <span className="eyebrow">Execução contínua</span>
                 <h2 style={{ fontSize: "clamp(28px, 4vw, 42px)", lineHeight: 1.1, marginBottom: 20 }}>
-                  O que o Rodrigo acompanha pra você <em className="logo-font-highlight">toda semana.</em>
+                  O que o Agente Polpo acompanha pra você <em className="logo-font-highlight">toda semana.</em>
                 </h2>
                 <p style={{ fontSize: "18px", color: "var(--text-muted)" }}>
-                  Automação focada no seu caixa. Chega de surpresas e margens espremidas.
+                  Custo real, não estimativa. Calculado com o preço que você pagou — puxado direto das suas notas fiscais.
                 </p>
               </div>
               <div>
@@ -154,29 +144,29 @@ export default function CmvLandingPage() {
               </div>
             </div>
             
-            <div className="grid-3" style={{ marginTop: "40px" }}>
-              <div className="feature-card reveal reveal-up delay-100">
-                <h3>Custo por prato</h3>
-                <p>Calculamos o custo real de hoje com base nos insumos da semana e no preço que você pagou, não apenas na estimativa inicial.</p>
+            <div className="bento-grid" style={{ marginTop: "40px" }}>
+              <div className="feature-card bento-card-large reveal reveal-up delay-100">
+                <h3>Custo real por prato</h3>
+                <p>Notas fiscais atualizam automaticamente o custo dos pratos. Chega de ficha técnica desatualizada.</p>
                 <div className="feature-card-ui-wrapper">
                   <div className="ui-mock-item anim-slide-up" style={{ animationDelay: "0.1s" }}>
-                    <span>Pão Brioche</span>
-                    <span style={{ fontWeight: 600 }}>R$ 1,40</span>
+                     <span>Pão Brioche</span>
+                     <strong>R$ 1,40</strong>
                   </div>
                   <div className="ui-mock-item anim-slide-up" style={{ animationDelay: "0.3s" }}>
-                    <span>Blend 160g</span>
-                    <span style={{ fontWeight: 600 }}>R$ 4,50</span>
+                     <span>Blend 160g</span>
+                     <strong>R$ 4,50</strong>
                   </div>
-                  <div className="ui-mock-item anim-slide-up" style={{ animationDelay: "0.5s", background: "#f0f0f0", borderTop: "2px solid #ccc" }}>
-                    <span style={{ fontWeight: 600 }}>Custo Total</span>
-                    <span style={{ fontWeight: 600 }}>R$ 5,90</span>
+                  <div className="ui-mock-item anim-slide-up" style={{ animationDelay: "0.5s", backgroundColor: "#f0f0f0" }}>
+                     <span>Custo Total</span>
+                     <strong>R$ 5,90</strong>
                   </div>
                 </div>
               </div>
               
               <div className="feature-card reveal reveal-up delay-200">
-                <h3>Alertas de insumos</h3>
-                <p>Você vê o CMV da semana e do mês por categoria. Se os preços subirem demais, o Rodrigo te avisa na hora.</p>
+                <h3>Alerta de insumos</h3>
+                <p>Ficou mais caro? O Agente avisa na hora e mostra o impacto direto no prato.</p>
                 <div className="feature-card-ui-wrapper" style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
                   <div className="ui-mock-item anim-slide-up" style={{ width: "100%", flexDirection: "column", alignItems: "flex-start", gap: "8px", animationDelay: "0.2s", background: "#fff8e1", borderColor: "#f57f17" }}>
                     <div style={{ display: "flex", justifyContent: "space-between", width: "100%" }}>
@@ -190,7 +180,7 @@ export default function CmvLandingPage() {
               
               <div className="feature-card reveal reveal-up delay-300">
                 <h3>Sugestão de preço</h3>
-                <p>O Polpo aponta onde o desperdício está consumindo sua margem e sugere reajustes para equilibrar os lucros.</p>
+                <p>Margem caiu? Sugerimos um reajuste com o novo CMV projetado para sua aprovação.</p>
                 <div className="feature-card-ui-wrapper">
                   <div className="ui-mock-item anim-slide-up" style={{ flexDirection: "column", alignItems: "flex-start", gap: "8px", animationDelay: "0.3s" }}>
                     <div style={{ display: "flex", justifyContent: "space-between", width: "100%", fontSize: "11px", color: "var(--text-muted)" }}>
@@ -204,6 +194,40 @@ export default function CmvLandingPage() {
                     <div style={{ display: "flex", justifyContent: "space-between", width: "100%", fontSize: "11px", color: "var(--text-muted)" }}>
                       <span>Nova Margem</span>
                       <span style={{ color: "#2e7d32", fontWeight: "bold" }}>32%</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="feature-card bento-card-large reveal reveal-up delay-400">
+                <h3>Gestão na palma da mão</h3>
+                <p>Acompanhe sua margem e aprove reajustes sem sair do WhatsApp. Nada de planilhas complexas, apenas inteligência direto no seu celular.</p>
+                <div className="feature-card-ui-wrapper" style={{ background: "transparent", border: "none", padding: 0, marginTop: "16px", display: "flex", justifyContent: "center" }}>
+                  <div className="mobile-decision-mockup anim-slide-up" style={{ 
+                    background: "#ffffff", 
+                    borderRadius: "16px", 
+                    padding: "16px", 
+                    boxShadow: "0 8px 24px rgba(0,0,0,0.04)", 
+                    border: "1px solid rgba(0,0,0,0.06)",
+                    width: "100%",
+                    maxWidth: "300px",
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "12px"
+                  }}>
+                    <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", fontSize: "10px", color: "var(--text-muted)" }}>
+                      <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+                        <div style={{ width: "16px", height: "16px", borderRadius: "4px", background: "var(--accent)" }}></div>
+                        <strong>Agente Polpo</strong>
+                      </div>
+                      <span>Agora</span>
+                    </div>
+                    <p style={{ fontSize: "12px", color: "var(--text)", lineHeight: "1.4", margin: 0 }}>
+                      Sugestão de reajuste do <strong>Burger Clássico</strong>. Margem projetada: 32%.
+                    </p>
+                    <div style={{ display: "flex", gap: "8px", marginTop: "4px" }}>
+                      <button style={{ flex: 1, padding: "8px", borderRadius: "8px", background: "#f5f5f5", color: "#666", fontSize: "11px", fontWeight: "600", border: "none", cursor: "pointer", transition: "background 0.2s" }}>Ignorar</button>
+                      <button style={{ flex: 1, padding: "8px", borderRadius: "8px", background: "#1a1a1a", color: "#ffffff", fontSize: "11px", fontWeight: "600", border: "none", cursor: "pointer", transition: "background 0.2s" }}>Aprovar</button>
                     </div>
                   </div>
                 </div>
@@ -225,12 +249,12 @@ export default function CmvLandingPage() {
                 <div style={{ display: "flex", flexDirection: "column", gap: "24px", marginTop: "32px" }}>
                   <div style={{ borderTop: "1px solid var(--border)", paddingTop: "16px" }}>
                     <p style={{ fontSize: "16px", lineHeight: 1.5, color: "var(--text)", fontWeight: 500 }}>
-                      O preço dos insumos mudou mas o preço do seu prato provavelmente continua o mesmo. Sem acompanhar o CMV toda semana, você precifica no sentimento e o sentimento não percebe a inflação.
+                      O preço dos insumos mudou dezenas de vezes desde que você precificou o cardápio. O preço dos seus pratos, provavelmente, não. Sem acompanhar o CMV semana a semana, você precifica no sentimento — e o sentimento não percebe inflação de 0,8% ao mês.
                     </p>
                   </div>
                   <div style={{ borderTop: "1px solid var(--border)", paddingTop: "16px", paddingBottom: "16px" }}>
                     <p style={{ fontSize: "15px", lineHeight: 1.5, color: "var(--text-muted)" }}>
-                      Restaurantes que não rastreiam o CMV de forma ativa operam com margem de 8 a 15 pontos abaixo do potencial. O Polpo fecha essa lacuna sem você precisar preencher nenhuma planilha.
+                      Restaurantes sem controle ativo de CMV perdem muito dinheiro. O Agente Polpo fecha essa lacuna de forma automática usando apenas suas notas fiscais, sem precisar de planilhas.
                     </p>
                   </div>
                 </div>
@@ -249,16 +273,16 @@ export default function CmvLandingPage() {
             <div className="form-container reveal reveal-up">
               <div className="form-title">
                 <span className="eyebrow">Onboarding Controlado</span>
-                <h3>Entre na lista. <em className="logo-font-highlight">Sem compromisso.</em></h3>
+                <h3>Entre na lista e receba o <em className="logo-font-highlight">custo real dos seus pratos principais.</em></h3>
                 <p style={{ color: "var(--text-muted)", fontSize: "14px" }}>
-                  O Polpo está em fase de acesso antecipado para restaurantes selecionados. Você entra na fila e a gente avisa quando sua vaga abrir.
+                  O Polpo está em acesso antecipado. Quando sua vaga abrir, o Agente Polpo já entrega o custo atualizado dos pratos mais vendidos para você avaliar a margem real antes de decidir algo.
                 </p>
               </div>
               
               <WaitlistForm buttonText="Quero minha vaga" />
 
               <div style={{ marginTop: "24px", fontSize: "12px", color: "var(--text-muted)", textAlign: "center" }}>
-                Sem spam. Sem vendedor ligando. Quando abrirmos sua vaga, o Rodrigo já chega com o custo estimado dos seus pratos principais.
+                Sem spam. Sem vendedor ligando. Quando sua vaga abrir, o Agente Polpo trará resultados numéricos ao invés de promessas de vendas.
               </div>
             </div>
           </div>

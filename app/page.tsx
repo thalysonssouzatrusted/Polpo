@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState } from "react";
 import { WaitlistForm } from "@/components/WaitlistForm";
 
 interface ModuleData {
@@ -189,29 +189,7 @@ const CAPABILITIES: CapabilityData[] = [
 export default function Home() {
   const [activeModule, setActiveModule] = useState(0);
   const [activeCap, setActiveCap] = useState<number | null>(0);
-  const [scrollProgress, setScrollProgress] = useState(0);
-  const heroRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    const handleScroll = () => {
-      if (!heroRef.current) return;
-      const rect = heroRef.current.getBoundingClientRect();
-      const windowHeight = window.innerHeight;
-      
-      const scrolled = -rect.top;
-      const totalScrollable = rect.height - windowHeight;
-      
-      let progress = scrolled / totalScrollable;
-      if (progress < 0) progress = 0;
-      if (progress > 1) progress = 1;
-      
-      setScrollProgress(progress);
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    handleScroll();
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
 
   const scrollToWaitlist = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -226,14 +204,14 @@ export default function Home() {
       <main className="fade-in-entry">
         {/* SEÇÃO 1: Hero Text (Normal Flow) */}
         <section className="section" style={{ paddingTop: "120px", paddingBottom: "40px", textAlign: "center", display: "flex", flexDirection: "column", alignItems: "center" }}>
-          <div className="container" style={{ maxWidth: "800px" }}>
+          <div className="container">
             <div className="hero-hook reveal reveal-up" style={{ paddingBottom: "10px", position: "relative" }}>
               <img src="/Polpo/avatar-polpo-svg.svg" alt="Polpo" className="floating-avatar" />
               <span className="eyebrow" style={{ margin: "0 auto 16px auto" }}><span>🐙</span> Polpo · lista de espera · junho 2026</span>
-              <h1 className="hero-main-title">
+              <h1 className="hero-main-title" style={{ maxWidth: "700px", margin: "0 auto" }}>
                 Todo dono de restaurante <em>já sonhou</em> em ter mais braços. Trouxemos <em className="logo-font-highlight">oito.</em>
               </h1>
-              <p className="lead" style={{ fontSize: "19px", marginBottom: "32px" }}>
+              <p className="lead" style={{ fontSize: "19px", marginBottom: "32px", maxWidth: "520px", marginLeft: "auto", marginRight: "auto" }}>
                 A Polpo é o time de gestão financeira do seu restaurante direto no seu WhatsApp.
               </p>
               <div style={{ display: "flex", gap: "16px", alignItems: "center", justifyContent: "center" }}>
@@ -245,59 +223,54 @@ export default function Home() {
           </div>
         </section>
 
-        {/* SEÇÃO 2: Sticky Phone Animation */}
-        <section ref={heroRef} style={{ height: "250vh", position: "relative", backgroundColor: "var(--accent)", borderTopLeftRadius: "40px", borderTopRightRadius: "40px", marginTop: "40px" }}>
-          <div style={{ position: "sticky", top: 0, height: "100vh", display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden" }}>
-            <div className="sticky-phone-container">
-              <div className="phone-mockup reveal reveal-scale delay-200" style={{ boxShadow: "0 24px 64px rgba(0,0,0,0.3)" }}>
-                <div className="phone-notch" />
-                <div className="phone-screen">
-                  <div className="phone-statusbar">
-                    <span className="phone-statusbar-time">09:41</span>
-                  </div>
-                  <div className="phone-wa-header">
-                    <div className="phone-wa-avatar" style={{ background: 'transparent', padding: 0 }}>
-                      <img src="/Polpo/avatar-polpo-svg.svg" alt="Polpo" style={{ width: "36px", height: "36px", borderRadius: "50%", objectFit: "cover" }} />
-                    </div>
-                    <div>
-                      <div className="phone-wa-name">Polpo Concierge</div>
-                      <div className="phone-wa-status">online agora</div>
-                    </div>
-                  </div>
-                  <div className="phone-chat">
-                    <div className={`phone-bubble in chat-bubble-animated ${scrollProgress > 0.05 ? 'visible' : ''}`}>
-                      Bom dia! Conciliação iFood de ontem finalizada. ✅
-                      <div className="phone-bubble-alert">
-                        <strong>Repasse:</strong> R$ 4.290,00<br />
-                        <strong>Recuperado:</strong> R$ 42,90 (1 cancelamento)
-                      </div>
-                      <div className="phone-bubble-time">08:00</div>
-                    </div>
-                    <div className={`phone-bubble out chat-bubble-animated ${scrollProgress > 0.25 ? 'visible' : ''}`} style={{ marginTop: 8 }}>
-                      E as notas de insumos?
-                      <div className="phone-bubble-time">08:15</div>
-                    </div>
-                    <div className={`phone-bubble in chat-bubble-animated ${scrollProgress > 0.45 ? 'visible' : ''}`} style={{ marginTop: 8 }}>
-                      Processadas e lançadas como CMV.
-                      <div style={{ color: "var(--accent)", fontWeight: 600, marginTop: 3, fontSize: 10 }}>
-                        ⚠ Óleo de Soja subiu 18.5% no fornecedor X.
-                      </div>
-                      <div className="phone-bubble-time">08:16</div>
-                    </div>
-                    <div className={`phone-bubble out chat-bubble-animated ${scrollProgress > 0.65 ? 'visible' : ''}`} style={{ marginTop: 8 }}>
-                      Tem fornecedor mais barato?
-                      <div className="phone-bubble-time">08:17</div>
-                    </div>
-                    <div className={`phone-bubble in chat-bubble-animated ${scrollProgress > 0.85 ? 'visible' : ''}`} style={{ marginTop: 8 }}>
-                      Sim! Distribuidora Y: R$ 6,20/L (−22%). Cotação enviada. 🐙
-                      <div className="phone-bubble-time">08:17</div>
-                    </div>
-                  </div>
-                  <div className="phone-input-bar">
-                    <div className="phone-input-field">Mensagem</div>
-                    <div className="phone-send-btn">▶</div>
-                  </div>
+        {/* SEÇÃO 2: Phone Demo */}
+        <section style={{ backgroundColor: "var(--accent)", borderRadius: "40px", margin: "20px 20px 0 20px", padding: "80px 0", display: "flex", justifyContent: "center" }}>
+          <div className="phone-mockup" style={{ boxShadow: "0 24px 64px rgba(0,0,0,0.3)" }}>
+            <div className="phone-screen">
+              <div className="phone-statusbar">
+                <span className="phone-statusbar-time">09:41</span>
+              </div>
+              <div className="phone-wa-header">
+                <div className="phone-wa-avatar" style={{ background: 'transparent', padding: 0 }}>
+                  <img src="/Polpo/avatar-polpo-svg.svg" alt="Polpo" style={{ width: "36px", height: "36px", borderRadius: "50%", objectFit: "cover" }} />
                 </div>
+                <div>
+                  <div className="phone-wa-name">Polpo Concierge</div>
+                  <div className="phone-wa-status">online agora</div>
+                </div>
+              </div>
+              <div className="phone-chat">
+                <div className="phone-bubble in">
+                  Bom dia! Conciliação iFood de ontem finalizada. ✅
+                  <div className="phone-bubble-alert">
+                    <strong>Repasse:</strong> R$ 4.290,00<br />
+                    <strong>Recuperado:</strong> R$ 42,90 (1 cancelamento)
+                  </div>
+                  <div className="phone-bubble-time">08:00</div>
+                </div>
+                <div className="phone-bubble out" style={{ marginTop: 8 }}>
+                  E as notas de insumos?
+                  <div className="phone-bubble-time">08:15</div>
+                </div>
+                <div className="phone-bubble in" style={{ marginTop: 8 }}>
+                  Processadas e lançadas como CMV.
+                  <div style={{ color: "var(--accent)", fontWeight: 600, marginTop: 3, fontSize: 10 }}>
+                    ⚠ Óleo de Soja subiu 18.5% no fornecedor X.
+                  </div>
+                  <div className="phone-bubble-time">08:16</div>
+                </div>
+                <div className="phone-bubble out" style={{ marginTop: 8 }}>
+                  Tem fornecedor mais barato?
+                  <div className="phone-bubble-time">08:17</div>
+                </div>
+                <div className="phone-bubble in" style={{ marginTop: 8 }}>
+                  Sim! Distribuidora Y: R$ 6,20/L (−22%). Cotação enviada. 🐙
+                  <div className="phone-bubble-time">08:17</div>
+                </div>
+              </div>
+              <div className="phone-input-bar">
+                <div className="phone-input-field">Mensagem</div>
+                <div className="phone-send-btn">▶</div>
               </div>
             </div>
           </div>

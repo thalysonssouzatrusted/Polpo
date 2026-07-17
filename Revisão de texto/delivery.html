@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#ffffff">
+<meta name="description" content="O Léo audita cada pedido do seu delivery, detecta cancelamentos indevidos e monta as disputas para recuperar seu dinheiro.">
+<title>Polpo — Agente de Delivery | Recupere cancelamentos e extravios</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#17171f; --ink-soft:#4b4b58; --ink-faint:#8a8a96;
+  --paper:#ffffff; --paper-alt:#f7f6f2; --line:#e8e7e1;
+  --coral:#e8503a; --coral-soft:#fdeae6;
+  --wa-bg:#e9e3da; --wa-owner:#d9f7c6; --wa-agent:#ffffff;
+  --ok:#1e9e5a; --warn:#c77700; --bad:#cf3030;
+  --radius:16px; --max:1120px;
+  --font-sans:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  --font-serif:'Instrument Serif',Georgia,serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto} .reveal{transition:none!important;opacity:1!important;transform:none!important}}
+body{font-family:var(--font-sans);color:var(--ink);background:var(--paper);line-height:1.6;-webkit-font-smoothing:antialiased}
+img{max-width:100%;display:block}
+a{color:inherit;text-decoration:none}
+em{font-family:var(--font-serif);font-style:italic;font-weight:400;color:var(--coral)}
+h1 em,h2 em{font-size:1.06em;letter-spacing:.005em}
+.wrap{max-width:var(--max);margin:0 auto;padding:0 24px}
+
+/* header */
+header{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.nav{display:flex;align-items:center;justify-content:space-between;height:64px}
+.nav img{height:26px;width:auto}
+.nav-right{display:flex;align-items:center;gap:16px}
+.nav-tag{font-size:12.5px;color:var(--ink-faint);letter-spacing:.02em}
+.btn{display:inline-block;background:var(--ink);color:#fff;border:none;border-radius:999px;padding:12px 22px;font-size:14.5px;font-weight:600;cursor:pointer;transition:background .18s ease,transform .18s ease;font-family:var(--font-sans)}
+.btn:hover{background:var(--coral)}
+.btn:focus-visible,a:focus-visible,input:focus-visible,label:focus-visible{outline:2px solid var(--coral);outline-offset:2px}
+.btn-ghost{background:transparent;color:var(--ink);border:1.5px solid var(--line)}
+.btn-ghost:hover{background:var(--paper-alt);color:var(--ink)}
+.btn-sm{padding:9px 18px;font-size:13.5px}
+
+/* hero */
+.hero{padding:72px 0 80px;overflow:hidden}
+.hero-grid{display:grid;grid-template-columns:1.08fr .92fr;gap:56px;align-items:center}
+.eyebrow-badge{display:inline-flex;align-items:center;gap:10px;background:var(--paper-alt);border:1px solid var(--line);border-radius:999px;padding:7px 16px 7px 8px;font-size:13px;font-weight:600;color:var(--ink-soft);margin-bottom:26px}
+.eyebrow-badge img{width:26px;height:26px;border-radius:50%;object-fit:cover}
+h1{font-size:clamp(34px,4.6vw,54px);line-height:1.08;letter-spacing:-.022em;font-weight:800;margin-bottom:22px}
+.hero p.sub{font-size:18px;color:var(--ink-soft);max-width:34em;margin-bottom:32px}
+.hero-ctas{display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+.hero-ctas .link-how{font-size:14.5px;font-weight:600;color:var(--ink-soft);border-bottom:1.5px solid var(--line);padding-bottom:2px}
+.hero-ctas .link-how:hover{color:var(--coral);border-color:var(--coral)}
+
+/* phone chat */
+.phone{background:var(--wa-bg);border:1px solid var(--line);border-radius:28px;box-shadow:0 24px 60px -24px rgba(23,23,31,.28);overflow:hidden;max-width:400px;margin-left:auto}
+.phone-status{display:flex;justify-content:space-between;padding:10px 18px 6px;font-size:12px;font-weight:600;color:var(--ink-soft)}
+.chat-head{display:flex;align-items:center;gap:11px;background:#fff;padding:11px 16px;border-bottom:1px solid var(--line)}
+.chat-head img{width:38px;height:38px;border-radius:50%;object-fit:cover}
+.chat-head .nm{font-size:14.5px;font-weight:700;line-height:1.2}
+.chat-head .st{font-size:12px;color:var(--ok);display:flex;align-items:center;gap:5px}
+.chat-head .st::before{content:'';width:7px;height:7px;border-radius:50%;background:var(--ok)}
+.chat-body{padding:16px 14px 18px;display:flex;flex-direction:column;gap:9px;min-height:330px}
+.bub{max-width:86%;border-radius:12px;padding:10px 13px;font-size:13.6px;line-height:1.5;position:relative;box-shadow:0 1px 1px rgba(0,0,0,.06)}
+.bub .t{display:block;font-size:10.5px;color:var(--ink-faint);text-align:right;margin-top:4px}
+.bub.agent{background:var(--wa-agent);align-self:flex-start;border-top-left-radius:4px}
+.bub.owner{background:var(--wa-owner);align-self:flex-end;border-top-right-radius:4px}
+.bub b{font-weight:700}
+.chat-input{display:flex;align-items:center;gap:10px;background:#fff;border-top:1px solid var(--line);padding:10px 14px;font-size:13.5px;color:var(--ink-faint)}
+.chat-input .send{margin-left:auto;width:32px;height:32px;border-radius:50%;background:var(--coral);color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px}
+
+/* sections */
+section{padding:88px 0}
+section.alt{background:var(--paper-alt);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.eyebrow{display:inline-block;font-size:12.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--coral);margin-bottom:18px}
+h2{font-size:clamp(27px,3.4vw,40px);line-height:1.14;letter-spacing:-.018em;font-weight:800;max-width:21em}
+.section-sub{font-size:17px;color:var(--ink-soft);max-width:38em;margin-top:18px}
+.pain-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:60px;align-items:start}
+blockquote{background:var(--paper);border:1px solid var(--line);border-left:4px solid var(--coral);border-radius:var(--radius);padding:26px 28px;font-size:16.5px;line-height:1.55;box-shadow:0 14px 34px -22px rgba(23,23,31,.22)}
+blockquote .who{display:flex;align-items:center;gap:10px;margin-top:16px;font-size:13.5px;color:var(--ink-faint);font-style:normal;font-family:var(--font-sans)}
+blockquote .who img{width:30px;height:30px;border-radius:50%;object-fit:cover}
+blockquote p{font-family:var(--font-serif);font-style:italic;font-size:18px;color:var(--ink)}
+
+/* pillar cards */
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:48px}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:26px;display:flex;flex-direction:column;gap:14px;transition:transform .2s ease,box-shadow .2s ease}
+.card:hover{transform:translateY(-4px);box-shadow:0 18px 44px -24px rgba(23,23,31,.25)}
+.card h3{font-size:18.5px;font-weight:800;letter-spacing:-.01em}
+.card>p{font-size:14.5px;color:var(--ink-soft);flex:1}
+.mini{background:var(--paper-alt);border:1px solid var(--line);border-radius:12px;padding:14px 15px;font-size:13px}
+.mini .row{display:flex;justify-content:space-between;gap:10px;padding:5px 0;border-bottom:1px dashed var(--line)}
+.mini .row:last-child{border-bottom:none}
+.mini .row b{font-weight:700}
+.mini .total{border-top:1.5px solid var(--ink);margin-top:4px;padding-top:8px}
+.pill{display:inline-block;border-radius:999px;padding:2px 10px;font-size:11.5px;font-weight:700}
+.pill.ok{background:#e3f6ea;color:var(--ok)}
+.pill.warn{background:#fdf1de;color:var(--warn)}
+.pill.bad{background:#fbe4e4;color:var(--bad)}
+.mini .alert-title{display:flex;align-items:center;gap:8px;font-weight:700;margin-bottom:6px}
+.mini .alert-title::before{content:'⚠';color:var(--warn)}
+.mini .cta-line{margin-top:10px;font-weight:700;color:var(--coral);font-size:12.5px}
+
+/* market */
+.market-grid{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center}
+.market p{font-size:16.5px;color:var(--ink-soft);margin-top:20px}
+.market p b{color:var(--ink)}
+.big-number{background:var(--ink);color:#fff;border-radius:var(--radius);padding:40px 36px}
+.big-number .n{font-family:var(--font-serif);font-style:italic;font-size:clamp(38px,4.5vw,56px);line-height:1.05;color:#ffd9d1}
+.big-number .l{font-size:14px;color:#b9b9c4;margin-top:12px;max-width:26em}
+
+/* form */
+.form-card{background:var(--paper);border:1px solid var(--line);border-radius:22px;padding:44px;max-width:660px;margin:44px auto 0;box-shadow:0 24px 60px -30px rgba(23,23,31,.25)}
+.field{margin-bottom:18px}
+.field label{display:block;font-size:13px;font-weight:700;margin-bottom:7px;color:var(--ink-soft)}
+.field input[type=text],.field input[type=tel]{width:100%;border:1.5px solid var(--line);border-radius:12px;padding:13px 15px;font-size:15px;font-family:var(--font-sans);background:var(--paper-alt)}
+.field input:focus{border-color:var(--coral);outline:none;background:#fff}
+.choices{display:flex;gap:8px;flex-wrap:wrap}
+.choices label{border:1.5px solid var(--line);border-radius:999px;padding:9px 16px;font-size:13.5px;font-weight:600;cursor:pointer;color:var(--ink-soft);background:var(--paper-alt)}
+.choices input{display:none}
+.choices input:checked+span{color:#fff}
+.choices label:has(input:checked){background:var(--ink);border-color:var(--ink);color:#fff}
+.check{display:flex;align-items:center;gap:10px;font-size:14.5px;font-weight:600;margin:22px 0}
+.check input{width:18px;height:18px;accent-color:var(--coral)}
+.form-card .btn{width:100%;padding:15px;font-size:15.5px}
+.form-note{text-align:center;font-size:13px;color:var(--ink-faint);margin-top:16px}
+.form-success{display:none;text-align:center;padding:30px 10px}
+.form-success .em{font-size:40px}
+.form-success h3{font-size:20px;margin:10px 0 6px}
+.form-success p{font-size:14.5px;color:var(--ink-soft)}
+.center{text-align:center}
+.center h2,.center .section-sub{margin-left:auto;margin-right:auto}
+
+/* footer */
+footer{border-top:1px solid var(--line);padding:36px 0;font-size:13.5px;color:var(--ink-faint)}
+.foot{display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap}
+.foot img{height:22px}
+.foot nav{display:flex;gap:22px;flex-wrap:wrap}
+.foot nav a:hover{color:var(--coral)}
+.foot nav a.on{color:var(--ink);font-weight:700}
+
+/* reveal */
+.reveal{opacity:0;transform:translateY(14px);transition:opacity .55s ease,transform .55s ease}
+.reveal.in{opacity:1;transform:none}
+
+@media(max-width:900px){
+  .hero{padding:44px 0 56px}
+  .hero-grid,.pain-grid,.market-grid{grid-template-columns:1fr;gap:40px}
+  .phone{margin:0 auto}
+  .cards{grid-template-columns:1fr}
+  section{padding:64px 0}
+  .form-card{padding:28px 22px}
+  .nav-tag{display:none}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap nav">
+    <a href="index.html"><img src="https://thalysonssouzatrusted.github.io/Polpo/polpo-logo-dark.svg" alt="Polpo" onerror="this.outerHTML='<span style=&quot;font-weight:800;font-size:19px;letter-spacing:-.02em&quot;>polpo <span style=&quot;font-size:16px&quot;>🐙</span></span>'"></a>
+    <div class="nav-right">
+      <span class="nav-tag">lista de espera · 2026</span>
+      <a class="btn btn-sm" href="#lista">Garantir minha vaga</a>
+    </div>
+  </div>
+</header>
+
+<main>
+<!-- HERO -->
+<div class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <div class="eyebrow-badge"><img src="https://thalysonssouzatrusted.github.io/Polpo/Leo.png" alt="Léo" onerror="this.style.display='none'"><span>Pare de assumir o prejuízo das plataformas</span></div>
+      <h1>Quantos pedidos cancelados você pagou do próprio bolso <em>este mês?</em></h1>
+      <p class="sub">O Léo audita cada pedido do seu delivery, separa os cancelamentos que têm chance real de contestação e monta a disputa pra você — todo dia, sem você abrir o portal.</p>
+      <div class="hero-ctas">
+        <a class="btn" href="#lista">Quero auditar meus cancelamentos</a>
+        <a class="link-how" href="#como">Como funciona</a>
+      </div>
+    </div>
+    <div class="phone reveal">
+      <div class="phone-status"><span>09:41</span><span>●●● ▲ ▮</span></div>
+      <div class="chat-head">
+        <img src="https://thalysonssouzatrusted.github.io/Polpo/Leo.png" alt="Léo" onerror="this.style.display='none'">
+        <div><div class="nm">Léo · Operações Polpo</div><div class="st">online agora</div></div>
+      </div>
+      <div class="chat-body">
+      <div class="bub agent">Bom dia! Auditoria do delivery de ontem pronta. 🛵<br><b>3 cancelamentos</b> depois do preparo, total de <b>R$ 145,00</b>.<br>2 têm chance alta de reembolso — já montei as contestações com os comprovantes.<span class="t">08:02</span></div>
+      <div class="bub agent">Abri as 2 disputas no portal do iFood. Previsão de resposta: <b>até 5 dias úteis</b>. Te aviso assim que sair o resultado.<span class="t">08:03</span></div>
+      <div class="bub agent">Outra coisa: 4 pedidos atrasaram mais de 20 min ontem à noite. Sugiro ajustar o tempo de preparo do jantar para 35 min e proteger sua nota na plataforma. <b>Posso aplicar?</b><span class="t">08:04</span></div>
+      <div class="bub owner">Pode sim 👍<span class="t">08:11 ✓✓</span></div>
+      <div class="bub agent">Feito. Qualquer atraso novo eu te aviso antes de virar punição no algoritmo. 🐙<span class="t">08:11</span></div>
+      </div>
+      <div class="chat-input"><span>Mensagem</span><span class="send">▶</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- DOR -->
+<section class="alt">
+  <div class="wrap pain-grid">
+    <div class="reveal">
+      <span class="eyebrow">Prejuízo silencioso</span>
+      <h2>Extravio, golpe e cancelamento indevido caem <em>na sua conta</em> — não na da plataforma.</h2>
+      <p class="section-sub">O cliente diz que não recebeu. O motoboy some com o pedido. O cancelamento chega depois que a cozinha já produziu. Em todos esses casos, quem paga é você — a menos que conteste dentro do prazo, com as provas certas.</p>
+      <p class="section-sub">O problema: conferir pedido por pedido no portal leva horas que você não tem. Então a maioria dos donos aceita calada. Todo mês.</p>
+    </div>
+    <blockquote class="reveal">
+      <p>“3 cancelamentos ontem. R$ 145 em jogo. 2 têm chance real de disputa — já montei tudo, é só acompanhar.”</p>
+      <div class="who"><img src="https://thalysonssouzatrusted.github.io/Polpo/Leo.png" alt="Léo" onerror="this.style.display='none'"><span>Léo, agente de delivery do Polpo</span></div>
+    </blockquote>
+  </div>
+</section>
+
+<!-- EXECUÇÃO -->
+<section id="como">
+  <div class="wrap">
+    <span class="eyebrow">Execução contínua</span>
+    <h2>Três coisas que o Léo resolve pra você <em>todo dia.</em></h2>
+    <p class="section-sub">Auditoria diária do seu delivery, focada em uma coisa: dinheiro que era seu voltar pra sua conta.</p>
+    <div class="cards">
+      <div class="card reveal">
+        <h3>Radar de Extravios</h3>
+        <p>Pedido saiu para entrega e foi reportado como “não recebido”? O Léo cruza horário de despacho, rastreio e histórico do cliente para identificar se o erro foi da plataforma — e sinalizar o que dá pra contestar.</p>
+        <div class="mini"><div class="row"><span>Pedido #8902</span><span class="pill bad">Extraviado</span></div>
+            <div class="row"><span>Pedido #8903</span><span class="pill ok">Entregue</span></div>
+            <div class="row"><span>Pedido #8904</span><span class="pill warn">Contestável</span></div></div>
+      </div>
+      <div class="card reveal">
+        <h3>Filtro de Cancelamentos</h3>
+        <p>Nem todo cancelamento vale disputa. O Léo filtra só os indevidos — cancelados após o preparo, fora da política da plataforma — e ignora o ruído. Você só olha o que tem chance real de virar reembolso.</p>
+        <div class="mini"><div class="alert-title">Alerta iFood</div>
+            <div>2 cancelamentos indevidos detectados.</div>
+            <div class="cta-line">Revisar contestação →</div></div>
+      </div>
+      <div class="card reveal">
+        <h3>Disputa Pronta</h3>
+        <p>Para cada caso contestável, o Léo reúne as provas — horário de aceite, despacho, valor, histórico — e monta a contestação. Você aprova, ele protocola e acompanha o prazo até o reembolso cair.</p>
+        <div class="mini"><div class="row"><span>Disputa #409</span><b>R$ 125,00</b></div>
+            <div class="row"><span>Status</span><span class="pill warn">Aberta</span></div>
+            <div class="row"><span>Resposta prevista</span><b>5 dias úteis</b></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MERCADO -->
+<section class="alt market">
+  <div class="wrap market-grid">
+    <div class="reveal">
+      <span class="eyebrow">Mercado</span>
+      <h2>Quanto você está <em>perdendo</em> sem saber?</h2>
+      <p>Em uma operação de delivery típica, entre 1% e 3% dos pedidos terminam em cancelamento ou extravio. Num restaurante que fatura R$ 60 mil/mês em delivery, isso significa <b>R$ 600 a R$ 1.800 todo mês</b> — e a maior parte é contestável, se alguém abrir a disputa no prazo.</p>
+      <p>O Léo existe para ser esse alguém. Ele vasculha sua operação todos os dias, separa o que é recuperável e não deixa prazo de contestação vencer em silêncio.</p>
+    </div>
+    <div class="big-number reveal">
+      <div class="n">R$ 600 – 1.800<br>/mês</div>
+      <div class="l">Perda média com cancelamentos e extravios em um delivery de R$ 60 mil/mês — a maior parte contestável dentro do prazo.</div>
+    </div>
+  </div>
+</section>
+
+<!-- FORM -->
+<section id="lista">
+  <div class="wrap center">
+    <span class="eyebrow">Onboarding controlado</span>
+    <h2>Entre na lista e receba a <em>auditoria dos seus últimos 30 dias.</em></h2>
+    <p class="section-sub">O Polpo está em acesso antecipado para restaurantes selecionados. Ao entrar na fila, quando sua vaga abrir, o Léo chega com a primeira auditoria pronta: quanto você perdeu em cancelamentos no último mês e quanto dava pra ter recuperado.</p>
+    <div class="form-card" style="text-align:left">
+      <div class="form-fields">
+        <div class="field"><label>Nome do restaurante</label><input type="text" placeholder="Ex.: Cantina do Zé"></div>
+        <div class="field"><label>WhatsApp (com DDD)</label><input type="tel" placeholder="(11) 90000-0000"></div>
+        <div class="field"><label>Quantas lojas?</label>
+          <div class="choices">
+            <label><input type="radio" name="lojas" checked><span>1 loja</span></label>
+            <label><input type="radio" name="lojas"><span>2 lojas</span></label>
+            <label><input type="radio" name="lojas"><span>3 lojas</span></label>
+            <label><input type="radio" name="lojas"><span>4 ou mais</span></label>
+          </div>
+        </div>
+        <div class="field"><label>Faturamento mensal aproximado <span style="font-weight:400;color:var(--ink-faint)">(opcional)</span></label>
+          <div class="choices">
+            <label><input type="radio" name="fat"><span>até 30 mil</span></label>
+            <label><input type="radio" name="fat"><span>30–80 mil</span></label>
+            <label><input type="radio" name="fat"><span>80–150 mil</span></label>
+            <label><input type="radio" name="fat"><span>+150 mil</span></label>
+          </div>
+        </div>
+        <label class="check"><input type="checkbox" checked> Opero no iFood</label>
+        <button class="btn" onclick="return submitWaitlist(this)">Quero minha auditoria de cancelamentos</button>
+        <p class="form-note">Sem spam. Sem vendedor ligando. Quando sua vaga abrir, o Léo entra em contato direto — já com números, não com pitch.</p>
+      </div>
+      <div class="form-success">
+        <div class="em">🐙</div>
+        <h3>Você está na lista!</h3>
+        <p>Quando sua vaga abrir, o Léo entra em contato no seu WhatsApp com a auditoria dos seus últimos 30 dias de delivery.</p>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap foot">
+    <img src="https://thalysonssouzatrusted.github.io/Polpo/polpo-logo-dark.svg" alt="Polpo" onerror="this.outerHTML='<span style=&quot;font-weight:800;font-size:19px;letter-spacing:-.02em&quot;>polpo <span style=&quot;font-size:16px&quot;>🐙</span></span>'">
+    <nav>
+      <a href="index.html">Visão Geral</a>
+      <a href="delivery.html" class="on">Agente Delivery</a>
+      <a href="conciliacao.html" class="">Agente de Conciliação</a>
+      <a href="cmv.html" class="">Agente de CMV</a>
+    </nav>
+    <span>© 2026 Polpo. Todos os direitos reservados.</span>
+  </div>
+</footer>
+<script>
+document.querySelectorAll('.reveal').forEach(function(el){
+  var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{threshold:.12});
+  io.observe(el);
+});
+function submitWaitlist(btn){
+  var card=btn.closest('.form-card');
+  card.querySelector('.form-fields').style.display='none';
+  card.querySelector('.form-success').style.display='block';
+  return false;
+}
+</script>
+</body>
+</html>
